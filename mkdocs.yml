@@ -1,0 +1,43 @@
+site_name: "AI-PDLC: как меняется процесс создания продукта с использованием AI"
+site_description: "Курс для тех, кто принимает решения: что это, чем отличается от привычной разработки и что меняет в деньгах, людях и контроле"
+site_url: https://ykononov.com/aipdlc/
+site_author: Юрий Кононов
+copyright: CC BY 4.0 · Юрий Кононов · ykononov.com
+
+theme:
+  name: material
+  language: ru
+  palette:
+    scheme: default
+    primary: blue grey
+    accent: amber
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+    - toc.integrate
+
+nav:
+  - Введение: index.md
+  - 01. Что такое AI-PDLC: 01-what-is-ai-pdlc.md
+  - 02. Чем отличается от привычного процесса: 02-vs-traditional.md
+  - 03. Почему «купили ассистента» не сработало: 03-why-assistants-fail.md
+  - 04. Что говорят исследования: 04-research-evidence.md
+  - 05. Куда вкладывать деньги: 05-where-to-invest.md
+  - 06. Контроль, безопасность, регулятор: 06-control-and-compliance.md
+  - 07. Что будет с людьми: 07-people-and-teams.md
+  - 08. Как считать эффект: 08-metrics.md
+  - 09. С чего начать: 09-getting-started.md
+  - Частые вопросы: faq.md
+  - Чек-лист для руководителя: checklist.md
+  - Чек-лист для команды: checklist-team.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+
+docs_dir: docs

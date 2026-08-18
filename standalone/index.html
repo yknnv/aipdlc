@@ -1,0 +1,1413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light only">
+<meta name="supported-color-schemes" content="light">
+<title>AI-PDLC: как меняется процесс создания продукта с использованием AI — бесплатный курс</title>
+<meta name="description" content="AI-PDLC: как меняется процесс создания продукта с использованием AI. Бесплатный курс на 52 минуты для участников производственных команд и всех, кто хочет понять, как устроено создание продукта в ближайшие годы: что такое AI-PDLC, чем отличается от привычного процесса разработки на конкретном примере, что будет с людьми, деньгами и контролем. 8 модулей и ответы на частые вопросы.">
+<meta property="og:title" content="AI-PDLC: как меняется процесс создания продукта с использованием AI">
+<meta property="og:description" content="Курс для тех, кто принимает решения: что это, чем отличается от привычной разработки и что меняет в деньгах, людях и контроле">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ykononov.com/aipdlc">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0B1A24;
+  --ink-70:rgba(11,26,36,.70);
+  --ink-45:rgba(11,26,36,.45);
+  --ink-15:rgba(11,26,36,.15);
+  --blueprint:#1D4E6B;
+  --blueprint-soft:#6E93A8;
+  --paper:#E6EAEC;
+  --paper-2:#F2F5F6;
+  --hivis:#E9B824;
+  --signal:#B4381F;
+  --ok:#2F6B4F;
+  --rail:64px;
+  --maxw:760px;
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;background-color:#E6EAEC}
+html{-webkit-text-size-adjust:100%}
+body{
+  background-color:var(--paper);
+  color:var(--ink);
+  font-family:'IBM Plex Sans',system-ui,sans-serif;
+  font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:'Unbounded',system-ui,sans-serif;font-weight:800;letter-spacing:-.02em;line-height:1.12;margin:0}
+.mono{font-family:'IBM Plex Mono',ui-monospace,monospace}
+a{color:var(--blueprint);text-decoration:none;border-bottom:1px solid rgba(29,78,107,.35)}
+a:hover{border-bottom-color:var(--blueprint)}
+:focus-visible{outline:2px solid var(--blueprint);outline-offset:3px}
+
+.top{
+  position:sticky;top:0;z-index:40;
+  display:flex;align-items:center;gap:14px;
+  padding:11px 20px;
+  background:rgba(230,234,236,.94);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--ink-15);
+}
+.brand{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint);background:none;border:0;padding:0;cursor:pointer}
+.brand b{color:var(--ink)}
+.top .fill{flex:1}
+.faqbtn{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  background:none;border:1.5px solid var(--ink-15);color:var(--blueprint);padding:6px 11px;cursor:pointer;
+}
+.faqbtn:hover{border-color:var(--blueprint)}
+.counter{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.08em;color:var(--ink-45)}
+.counter i{color:var(--ink);font-style:normal;font-weight:600}
+.tape{height:6px;width:100%;background:repeating-linear-gradient(115deg,var(--hivis) 0 12px,var(--ink) 12px 24px)}
+
+.shell{
+  display:flex;min-height:calc(100vh - 60px);
+  background-color:var(--paper);
+  background-image:
+    linear-gradient(to right,rgba(29,78,107,.055) 1px,transparent 1px),
+    linear-gradient(to bottom,rgba(29,78,107,.055) 1px,transparent 1px);
+  background-size:28px 28px;
+}
+.spine{
+  width:var(--rail);flex:0 0 var(--rail);
+  border-right:1px solid var(--ink-15);
+  padding:26px 0;display:flex;flex-direction:column;align-items:center;
+  position:sticky;top:60px;align-self:flex-start;height:calc(100vh - 60px);
+}
+.node{width:100%;border:0;background:none;padding:0;cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.node:disabled{cursor:not-allowed}
+.dot{
+  width:22px;height:22px;border-radius:50%;
+  border:1.5px solid var(--ink-15);background:var(--paper-2);
+  display:grid;place-items:center;
+  font-family:'IBM Plex Mono',monospace;font-size:10px;font-weight:600;color:var(--ink-45);
+  transition:transform .18s ease,background .18s ease,border-color .18s ease;
+}
+.node:not(:disabled):hover .dot{transform:scale(1.14);border-color:var(--blueprint)}
+.node[data-state="open"] .dot{border-color:var(--ink);background:var(--hivis);color:var(--ink)}
+.node[data-state="passed"] .dot{border-color:var(--ok);background:var(--ok);color:#fff}
+.link{width:1.5px;height:22px;background:var(--ink-15)}
+.node[data-state="passed"]+.link{background:var(--ok)}
+
+main{flex:1;min-width:0;padding:44px 28px 120px}
+.wrap{max-width:var(--maxw);margin:0 auto}
+
+.eyebrow{font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--blueprint);margin-bottom:22px}
+.thesis{font-size:clamp(28px,4.8vw,46px)}
+.thesis .dim{color:var(--blueprint-soft);display:block}
+.lede{font-size:19px;color:var(--ink-70);max-width:60ch;margin:26px 0 0}
+.herorow{
+  display:flex;align-items:center;gap:28px;flex-wrap:wrap;
+  margin:26px 0 0;padding-top:22px;border-top:1px solid var(--ink-15);
+}
+.claim{
+  flex:1 1 340px;
+  font-size:clamp(18px,2.1vw,21px);font-weight:600;line-height:1.36;
+  color:var(--ink);margin:0;max-width:34ch;
+  border-left:3px solid var(--hivis);padding-left:16px;
+}
+.byline{display:flex;align-items:center;gap:12px;margin:0;flex:0 0 auto}
+.byline .ava{
+  width:52px;height:52px;flex:0 0 52px;border-radius:50%;
+  object-fit:cover;object-position:50% 42%;display:block;
+  border:1.5px solid var(--ink);background:var(--paper-2);
+}
+.byline .who-txt .tg{
+  font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:.04em;
+  color:var(--blueprint);border-bottom:1px solid rgba(29,78,107,.3);margin-top:3px;align-self:flex-start;
+}
+.byline .who-txt .tg:hover{border-bottom-color:var(--blueprint)}
+.byline .who-txt{display:flex;flex-direction:column;line-height:1.35}
+.byline .who-txt b{font-size:15.5px;font-weight:600}
+.byline .who-txt i{
+  font-style:normal;font-family:'IBM Plex Mono',monospace;
+  font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);
+}
+
+.subs{border:1.5px solid var(--ink);background:var(--paper-2);margin:40px 0 0}
+.subs-tape{height:10px;background:repeating-linear-gradient(115deg,var(--hivis) 0 10px,var(--ink) 10px 20px)}
+.subs-in{padding:22px}
+.subs h3{font-size:19px;margin-bottom:8px}
+.subs p{color:var(--ink-70);font-size:15.5px;margin:0 0 18px}
+.subs-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:1px;background:var(--ink-15);border:1px solid var(--ink-15)}
+.subs-grid a{
+  background:var(--paper);padding:13px 15px;border:0;display:flex;flex-direction:column;gap:2px;
+  text-decoration:none;transition:background .15s ease;
+}
+.subs-grid a:hover{background:var(--paper-2)}
+.subs-grid .k{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)}
+.subs-grid .v{font-weight:600;font-size:15px;color:var(--ink)}
+.share-cta{
+  margin-top:22px;padding:18px 20px;border:1.5px dashed var(--ink-15);
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+}
+.share-cta p{margin:0;flex:1 1 260px;font-size:15.5px;color:var(--ink-70)}
+
+.who{border:1px solid var(--ink-15);background:var(--paper-2);padding:18px 20px;margin:32px 0;font-size:15.5px}
+.who .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint);display:block;margin-bottom:8px}
+.who ul{margin:0;padding-left:0;list-style:none}
+.who li{position:relative;padding-left:20px;margin-bottom:6px}
+.who li::before{content:'';position:absolute;left:2px;top:.62em;width:7px;height:1.5px;background:var(--blueprint)}
+.toc{border-top:1px solid var(--ink-15);margin-top:34px}
+.toc-row{display:flex;gap:16px;align-items:baseline;padding:13px 2px;border-bottom:1px solid var(--ink-15)}
+.toc-row .num{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--blueprint);font-weight:600;min-width:26px}
+.toc-row .t{font-weight:600}
+.toc-row .d{font-size:14px;color:var(--ink-45);margin-left:auto;text-align:right;max-width:46%}
+
+.mhead{border-bottom:2px solid var(--ink);padding-bottom:16px;margin-bottom:30px}
+.mnum{font-family:'Unbounded',sans-serif;font-size:13px;font-weight:600;color:var(--blueprint);letter-spacing:.06em}
+.mtitle{font-size:clamp(24px,3.6vw,36px);margin-top:8px}
+.mkick{color:var(--ink-70);margin-top:10px;font-size:16px}
+.steps-bar{display:flex;gap:5px;margin-bottom:26px}
+.sbit{height:3px;flex:1;background:var(--ink-15)}
+.sbit.on{background:var(--ink)}
+.stepnum{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-45);margin-bottom:10px}
+.step h3{font-size:22px;margin-bottom:14px}
+.step p{margin:0 0 16px}
+.step ul{margin:0 0 18px;padding-left:0;list-style:none}
+.step ul li{position:relative;padding-left:22px;margin-bottom:9px}
+.step ul li::before{content:'';position:absolute;left:2px;top:.62em;width:7px;height:1.5px;background:var(--blueprint)}
+.step strong{font-weight:600}
+.note{border-left:3px solid var(--hivis);background:var(--paper-2);padding:15px 18px;margin:22px 0;font-size:15.5px}
+.note .lbl{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint);display:block;margin-bottom:6px}
+.note.warn{border-left-color:var(--signal)}
+.note.field{border-left-color:var(--blueprint)}
+table{width:100%;border-collapse:collapse;margin:20px 0;font-size:15px}
+th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--ink-15);vertical-align:top}
+th{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--blueprint);font-weight:600}
+
+/* сквозной пример: две дорожки */
+.track{border:1px solid var(--ink-15);background:var(--paper-2);margin:22px 0}
+.track-h{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+  padding:10px 16px;border-bottom:1px solid var(--ink-15);display:flex;align-items:baseline;gap:10px;
+}
+.track-h .tot{margin-left:auto;color:var(--signal);font-weight:600;letter-spacing:.04em}
+.track.now .track-h{background:rgba(180,56,31,.07)}
+.track.next .track-h{background:rgba(47,107,79,.09)}
+.track.next .track-h .tot{color:var(--ok)}
+.leg{display:flex;gap:12px;padding:10px 16px;border-bottom:1px solid var(--ink-15);font-size:14.5px}
+.leg:last-child{border-bottom:0}
+.leg .d{font-family:'IBM Plex Mono',monospace;font-size:12px;color:var(--ink-45);min-width:58px;flex:0 0 58px;padding-top:2px}
+.leg .w{flex:1}
+.leg .w b{font-weight:600}
+.leg .w i{font-style:normal;color:var(--ink-45);display:block;font-size:13.5px}
+
+.nav{display:flex;gap:12px;align-items:center;margin-top:34px;padding-top:22px;border-top:1px solid var(--ink-15)}
+.btn{
+  font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+  padding:12px 20px;border:1.5px solid var(--ink);background:var(--paper-2);color:var(--ink);cursor:pointer;
+  transition:background .15s ease,color .15s ease;
+}
+.btn:hover{background:var(--ink);color:var(--paper)}
+.btn.primary{background:var(--ink);color:var(--paper)}
+.btn.primary:hover{background:var(--blueprint);border-color:var(--blueprint)}
+.btn:disabled{opacity:.32;cursor:not-allowed}
+.btn:disabled:hover{background:var(--paper-2);color:var(--ink)}
+.nav .fill{flex:1}
+
+.gate{margin-top:44px;border:1.5px solid var(--ink)}
+.gate-tape{height:14px;background:repeating-linear-gradient(115deg,var(--hivis) 0 14px,var(--ink) 14px 28px)}
+.gate-body{padding:24px 22px;background:var(--paper-2)}
+.gate h3{font-size:19px;margin-bottom:6px}
+.gate .req{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--ink-45);letter-spacing:.06em;margin-bottom:22px}
+.q{margin-bottom:26px}
+.q .qt{font-weight:600;margin-bottom:12px}
+.opt{
+  display:block;width:100%;text-align:left;border:1.5px solid var(--ink-15);background:var(--paper);
+  padding:11px 14px;margin-bottom:8px;cursor:pointer;font:inherit;font-size:15.5px;color:var(--ink);
+  transition:border-color .15s ease,background .15s ease;
+}
+.opt:hover:not(:disabled){border-color:var(--blueprint)}
+.opt:disabled{cursor:default}
+.opt.right{border-color:var(--ok);background:rgba(47,107,79,.09)}
+.opt.wrong{border-color:var(--signal);background:rgba(180,56,31,.08)}
+.opt .mk{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--ink-45);margin-right:9px}
+.why{font-size:14.5px;color:var(--ink-70);border-left:2px solid var(--blueprint-soft);padding-left:13px;margin-top:10px}
+.verdict{font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:.06em;padding:14px 16px;margin-top:6px;border:1.5px solid}
+.verdict.pass{border-color:var(--ok);color:var(--ok)}
+.verdict.fail{border-color:var(--signal);color:var(--signal)}
+
+/* faq */
+.faqitem{border-bottom:1px solid var(--ink-15)}
+.faqq{
+  width:100%;text-align:left;background:none;border:0;padding:15px 30px 15px 0;cursor:pointer;
+  font:inherit;font-weight:600;font-size:16.5px;color:var(--ink);position:relative;
+}
+.faqq::after{content:'+';position:absolute;right:4px;top:14px;font-family:'IBM Plex Mono',monospace;color:var(--blueprint);font-weight:400;font-size:19px}
+.faqitem.open .faqq::after{content:'–'}
+.faqa{display:none;padding:0 0 18px;font-size:15.5px;color:var(--ink-70)}
+.faqitem.open .faqa{display:block}
+.faqa p{margin:0 0 12px}
+.faqa p:last-child{margin-bottom:0}
+.srcs{font-size:15px}
+.srcs li{margin-bottom:12px}
+
+
+/* термины */
+abbr[data-t]{
+  text-decoration:none;border-bottom:1.5px dotted var(--blueprint);
+  cursor:pointer;color:var(--blueprint);font-weight:500;white-space:nowrap;
+}
+abbr[data-t]:hover{background:rgba(29,78,107,.08)}
+abbr[data-t]::after{content:'?';font-size:.62em;vertical-align:super;margin-left:1px;opacity:.65}
+
+/* шторка с определением */
+.sheet-bg{position:fixed;inset:0;background:rgba(11,26,36,.42);z-index:60;display:none}
+.sheet-bg.on{display:block}
+.sheet{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:min(560px,100%);
+  background:var(--paper-2);border:1.5px solid var(--ink);border-bottom:0;z-index:61;
+  padding:0 0 22px;display:none;max-height:78vh;overflow-y:auto;
+}
+.sheet.on{display:block}
+.sheet-tape{height:10px;background:repeating-linear-gradient(115deg,var(--hivis) 0 10px,var(--ink) 10px 20px)}
+.sheet-in{padding:20px 22px 0}
+.sheet .ab{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--blueprint)}
+.sheet h4{font-family:'Unbounded',sans-serif;font-size:19px;font-weight:800;margin:8px 0 4px;letter-spacing:-.02em;line-height:1.2}
+.sheet .full{font-size:14px;color:var(--ink-45);font-style:italic;margin-bottom:12px}
+.sheet .desc{font-size:15.5px;color:var(--ink-70);margin:0 0 16px}
+.sheet .close{width:100%;margin-top:4px}
+
+/* глоссарий */
+.gl{border-top:1px solid var(--ink-15)}
+.gl-item{border-bottom:1px solid var(--ink-15);padding:14px 2px}
+.gl-item .ab{font-family:'IBM Plex Mono',monospace;font-size:12.5px;font-weight:600;letter-spacing:.08em;color:var(--blueprint)}
+.gl-item .tt{font-weight:600;margin:2px 0 2px}
+.gl-item .full{font-size:13.5px;color:var(--ink-45);font-style:italic;margin-bottom:5px}
+.gl-item .dd{font-size:15px;color:var(--ink-70)}
+
+/* схемы */
+.fig{margin:26px 0}
+.fig svg{width:100%;height:auto;display:block;border:1px solid var(--ink-15);background:var(--paper-2)}
+.fig figcaption{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-45);margin-top:8px}
+
+/* нумерованная последовательность */
+.seq{counter-reset:s;margin:22px 0;padding:0;list-style:none}
+.seq>li{counter-increment:s;position:relative;padding:0 0 18px 46px;border-left:1.5px solid var(--ink-15);margin-left:13px}
+.seq>li:last-child{border-left-color:transparent;padding-bottom:0}
+.seq>li::before{
+  content:counter(s,decimal-leading-zero);position:absolute;left:-14px;top:0;
+  width:28px;height:28px;border-radius:50%;background:var(--ink);color:var(--paper);
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;display:grid;place-items:center;
+}
+.seq .st{font-weight:600;display:block;margin-bottom:4px}
+.seq .sm{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--blueprint);display:block;margin-bottom:6px}
+.seq .sq{font-size:15px;color:var(--ink-70);margin-top:7px;border-left:2px solid var(--blueprint-soft);padding-left:12px}
+
+/* подпись */
+.sig{
+  margin-top:46px;padding-top:14px;border-top:1px solid var(--ink-15);
+  display:flex;gap:10px;align-items:center;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--ink-45);
+}
+.sig a{color:var(--ink-45);border-bottom-color:var(--ink-15)}
+.sig a:hover{color:var(--blueprint)}
+.sig .sp{flex:1}
+.toast{
+  position:fixed;left:50%;transform:translateX(-50%);bottom:26px;z-index:70;
+  background:var(--ink);color:var(--paper);padding:11px 20px;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.06em;
+  opacity:0;pointer-events:none;transition:opacity .22s ease;
+}
+.toast.on{opacity:1}
+
+@media(max-width:720px){
+  :root{--rail:0px}
+  body{font-size:16px}
+  .shell{flex-direction:column}
+  .spine{display:none}
+  main{padding:26px 18px 90px}
+  .top{padding:10px 14px;gap:10px}
+  .thesis{font-size:clamp(24px,6.8vw,31px);line-height:1.18}
+  .claim{font-size:17px;padding-left:13px;max-width:100%;flex-basis:100%}
+  .herorow{gap:18px;margin-top:22px;padding-top:18px}
+  .lede{font-size:17px;margin-top:20px}
+  .toc-row{flex-wrap:wrap}
+  .toc-row .d{margin-left:0;text-align:left;max-width:100%;flex-basis:100%}
+  .mtitle{font-size:clamp(21px,5.6vw,28px)}
+  .step h3{font-size:19px}
+  table{font-size:14px}
+  th,td{padding:8px 8px}
+  .leg .d{min-width:50px;flex-basis:50px}
+  .nav{flex-wrap:wrap}
+  .btn{flex:1;text-align:center;padding:12px 14px}
+  .seq>li{padding-left:38px}
+  .sheet{width:100%}
+  .sig{flex-wrap:wrap;gap:6px 10px;font-size:10.5px}
+}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <button class="brand" onclick="restart()"><b>AI-PDLC</b> / курс</button>
+  <span class="fill"></span>
+  <button class="faqbtn" onclick="openGlossary()">Термины</button>
+  <button class="faqbtn" onclick="openFaq()">Вопросы</button>
+  <button class="faqbtn" onclick="shareCourse()" aria-label="Поделиться">Поделиться</button>
+  <span class="counter"><i id="cnt">0</i>/<span id="tot">9</span></span>
+</div>
+<div class="tape"></div>
+
+<div class="shell">
+  <nav class="spine" id="spine" aria-label="Модули курса"></nav>
+  <main><div class="wrap" id="view"></div></main>
+</div>
+
+<div class="sheet-bg" id="sheetbg" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true">
+  <div class="sheet-tape"></div>
+  <div class="sheet-in" id="sheetin"></div>
+  <div class="sheet-in"><button class="btn close" onclick="closeSheet()">Закрыть</button></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ── глоссарий ─────────────────────────────────────────── */
+const TERMS = {
+ 'pdlc':{ab:'PDLC',full:'Product Development Life Cycle',d:'Жизненный цикл продукта: весь путь от проблемы клиента до эксплуатации, включая исследование, требования, разработку, выпуск и работу в проде. Шире, чем SDLC, который начинается с готовых требований.'},
+ 'sdlc':{ab:'SDLC',full:'Software Development Life Cycle',d:'Классический жизненный цикл разработки: требования, проектирование, кодирование, тестирование, выпуск, сопровождение. Устроен вокруг того, что координация людей дорога, поэтому работа пакетируется в спринты.'},
+ 'aidlc':{ab:'AI-DLC',full:'AI-Driven Development Life Cycle',d:'Открытая методология AWS: агент готовит требования, планы, код и тесты, человек проверяет каждый шаг до исполнения. Три фазы — Inception, Construction, Operations. Опубликована в июле 2025, правила открыты в ноябре 2025.'},
+ 'sdd':{ab:'SDD',full:'Spec-Driven Development',d:'Разработка от спецификации: источником истины становится документ с требованиями, а код, тесты и документация порождаются из него. Изменения вносят в спецификацию, а не в код напрямую.'},
+ 'idp':{ab:'IDP',full:'Integrated Development Platform',d:'Платформа-операционная система для агентов и разработчиков: каталог инструментов и протоколов подключения, агенты-стражи, управление моделями, наблюдаемость и «золотой путь», по которому задача проходит без ручной сборки окружения. В литературе по платформенной инженерии близким термином называют internal developer platform, но в методологии AI-PDLC аббревиатура раскрывается именно как Integrated Development Platform.'},
+ 'adlc':{ab:'ADLC',full:'Agent Development Life Cycle',d:'Жизненный цикл самого агента: выбор модели, разработка через автопроверки, выкатка, наблюдение в проде, обнаружение деградации и замена. Отличается от жизненного цикла продукта и живёт параллельно ему.'},
+ 'harness':{ab:'Harness',full:'Окружение агента',d:'Всё, что находится вокруг модели: доступные инструменты, передаваемый контекст, память между сессиями, ограничители, протоколы и телеметрия. Модель задаёт качество в худшем случае, окружение определяет достижимый максимум.'},
+ 'bolt':{ab:'Bolt',full:'Болт, рабочий цикл',d:'Замена спринта в AI-DLC: цикл длиной в часы или дни. Команда валидирует предложенный агентом план, агент исполняет, результат проверяют. Пакетировать работу на две недели больше незачем.'},
+ 'uow':{ab:'Unit of work',full:'Единица работы',d:'Замена эпика: кусок работы такого размера, который агент способен удержать целиком, а человек — оценить за один заход. Если единицу не удаётся удержать в голове, её дробят.'},
+ 'evals':{ab:'Evals',full:'Автоматические оценки качества ИИ-выходов',d:'Воспроизводимые наборы проверок для вероятностных выходов модели: релевантность, полнота, соответствие политике, отсутствие ухудшения на эталонных сценариях. Важное уточнение: evals — про оценку поведения самой модели или агента. Обычный сгенерированный код проверяется тестами, и называть их evals некорректно, хотя в разговорной речи это часто смешивают.'},
+ 'evidence':{ab:'Evidence bundle',full:'Комплект доказательств готовности',d:'Что прикладывается к каждой единице работы вместо слова «готово»: спецификация, результаты автопроверок с порогами, заключения политик безопасности, след действий агента. По смыслу — автоматические ПСИ на каждый кусок работы.'},
+ 'guardian':{ab:'Guardian Agents',full:'Агенты-стражи',d:'Специализированные агенты, проверяющие результат основных: сверяют с политиками, блокируют опасные действия, фиксируют аудиторский след. Способ масштабировать контроль, когда людей на ручную проверку не хватает.'},
+ 'pac':{ab:'Policy-as-code',full:'Политики как исполняемый код',d:'Требования безопасности и регулятора записаны как автоматические проверки в процессе, а не как документ в вики. При коротком цикле то, что не проверяется автоматически, фактически не соблюдается.'},
+ 'psi':{ab:'ПСИ',full:'Приёмо-сдаточные испытания',d:'Обязательный гейт перед выпуском в промышленную эксплуатацию с участием службы безопасности, сопровождения и бизнес-пользователей. Российский корпоративный аналог того, что в методологии называют комплектом доказательств.'},
+ 'r05':{ab:'R0–R5',full:'Уровни прав агента',d:'Лестница разрешений: R0 — только подсказывает; R1 — готовит черновик, применяет человек; R2 — исполняет с подтверждением каждого шага; R3 — исполняет утверждённый план целиком; R4 — работает самостоятельно в очерченной области под автопроверками; R5 — действует без предварительного согласования, контроль по факту. Уровень назначается типу действия по обратимости и цене ошибки, а не команде или модели.'},
+ 'l05':{ab:'L0–L5',full:'Уровни зрелости организации',d:'L0 — ручной процесс; L1 — ассистент в редакторе у отдельных разработчиков; L2 — ИИ закрывает отдельные этапы; L3 — сквозной процесс с валидацией каждого шага; L4 — агент ведёт единицы работы, контроль автоматический; L5 — скоординированные команды агентов. Шкала нужна, чтобы не перепрыгивать: реалистичный шаг — один уровень за квартал.'},
+ 'dora':{ab:'DORA',full:'DevOps Research and Assessment',d:'Общепринятый набор из четырёх метрик доставки: частота деплоев, время от коммита до прода, доля неудачных изменений, время восстановления. В версии 2025 года дополнен показателями, связанными с ИИ.'},
+ 'mttr':{ab:'MTTR',full:'Mean Time To Recovery',d:'Среднее время восстановления после инцидента. Одна из четырёх метрик DORA, показывает не то, как редко вы падаете, а как быстро поднимаетесь.'},
+ 'ttm':{ab:'TTM',full:'Time to Market',d:'Время вывода на рынок: от решения делать до момента, когда функциональность доступна клиенту. Главная метрика результата, которую ассистент в редакторе почти не двигает.'},
+ 'cicd':{ab:'CI/CD',full:'Continuous Integration / Continuous Delivery',d:'Непрерывная интеграция и доставка: автоматическая сборка, прогон тестов и выкатка при каждом изменении. Базовое условие короткого цикла — без него ускорение упирается в ручные шаги.'},
+ 'sla':{ab:'SLA',full:'Service Level Agreement',d:'Соглашение об уровне обслуживания: обязательства по доступности и времени отклика. «Три девятки» означают 99,9% доступности, то есть около 8,7 часа простоя в год.'},
+ 'mvp':{ab:'MVP',full:'Minimum Viable Product',d:'Минимально жизнеспособный продукт: версия с самым коротким набором функциональности, достаточным, чтобы проверить гипотезу на реальных пользователях.'},
+ 'llm':{ab:'LLM',full:'Large Language Model',d:'Большая языковая модель — то, что стоит в основе агента. Ключевое для планирования: модель определяет качество в худшем случае, а окружение вокруг неё определяет достижимый максимум.'},
+ 'ctx':{ab:'Контекст',full:'Context window',d:'Объём информации, который модель удерживает за один проход. Прямо влияет на стоимость и качество: чем больше приходится втягивать, чтобы разобраться в задаче, тем дороже проход и выше вероятность ошибки.'},
+ 'mcp':{ab:'MCP',full:'Model Context Protocol',d:'Открытый протокол подключения инструментов и источников данных к модели. Часть окружения агента: определяет, к чему он вообще может обратиться и с какими правами.'},
+ 'orch':{ab:'Оркестратор',full:'От исполнителя к оркестратору',d:'Качественный сдвиг роли инженера: он перестаёт быть основным исполнителем кода и становится постановщиком задач для агентов, проектировщиком систем и проверяющим результат. Ведёт десятки задач параллельно вместо одной-двух. Меньше глубокой фокусировки на одной задаче, больше решений о качестве и приоритетах.'},
+ 'ax':{ab:'AX',full:'Agent Experience',d:'Идея о том, что платформа и рабочая среда проектируются под двух разных потребителей: человека и агента. Человеку нужны интерфейсы, исследовательские сессии и понятная валидация; агенту — машиночитаемые API, ограничители, политики эскалации и телеметрия. Это различие определяет профиль каждой роли в команде.'},
+ 'zf':{ab:'Zero friction',full:'Отсутствие организационных швов',d:'Свойство процесса, при котором на пути от намерения до выпуска нет передач между функциями, отдельной стадии ревью и ожидания согласований. Проверки при этом не исчезают — они встроены в каждый шаг и выполняются автоматически.'},
+ 'golden':{ab:'Golden dataset',full:'Эталонный набор сценариев',d:'Набор показательных случаев, на котором автоматически проверяется качество: реальные пользовательские сценарии плюс те, на которых система уже ошибалась. Наполнять его надо заранее, иначе вы измеряете историю своих аварий, а не качество продукта.'},
+ 'af':{ab:'Approval fatigue',full:'Усталость от подтверждений',d:'Состояние, когда запросов на подтверждение больше, чем команда способна осмысленно прочитать, и люди начинают нажимать «да» не глядя. Формально контроль есть, фактически его нет — и это хуже отсутствия контроля, потому что в аудиторском следе появляются подписи, которые ничего не означают. Лечится не дисциплиной, а сокращением числа подтверждений и переносом остальных проверок в автоматику.'},
+ 'mob':{ab:'Mob elaboration',full:'Совместный разбор требований',d:'Практика фазы Inception: уточняющие вопросы агента разбирает вся команда на одной встрече, а не один аналитик наедине с документом. Именно здесь противоречия в требованиях всплывают в первый день, а не на третьей неделе.'}
+};
+
+function openSheet(id){
+  const t=TERMS[id]; if(!t) return;
+  document.getElementById('sheetin').innerHTML=
+    `<div class="ab">${t.ab}</div><h4>${t.full}</h4><p class="desc">${t.d}</p>`;
+  document.getElementById('sheet').classList.add('on');
+  document.getElementById('sheetbg').classList.add('on');
+}
+function closeSheet(){
+  document.getElementById('sheet').classList.remove('on');
+  document.getElementById('sheetbg').classList.remove('on');
+}
+document.addEventListener('click',e=>{
+  const a=e.target.closest('abbr[data-t]');
+  if(a){ e.preventDefault(); openSheet(a.dataset.t); }
+});
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeSheet(); });
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('on');
+  clearTimeout(window.__tt); window.__tt=setTimeout(()=>t.classList.remove('on'),2200);
+}
+async function shareCourse(){
+  const url='https://ykononov.com/aipdlc';
+  const data={title:'AI-PDLC: как меняется процесс создания продукта с использованием AI',text:'Бесплатный курс: что это, чем отличается от привычной разработки и что меняет в деньгах, людях и контроле',url};
+  try{
+    if(navigator.share){ await navigator.share(data); return; }
+    await navigator.clipboard.writeText(url);
+    toast('Ссылка скопирована');
+  }catch(err){ toast(url); }
+}
+
+/* ── схемы ─────────────────────────────────────────────── */
+const C={ink:'#0B1A24',bp:'#1D4E6B',soft:'#6E93A8',hv:'#E9B824',sig:'#B4381F',ok:'#2F6B4F',pp:'#F2F5F6',l:'rgba(11,26,36,.15)'};
+const FIG={};
+
+FIG.phases=`<figure class="fig"><svg viewBox="0 0 700 210" role="img" aria-label="Три фазы AI-DLC и петля обратной связи">
+<g font-family="IBM Plex Sans,sans-serif">
+${[['Inception','требования и куски работы',30],['Construction','план, исполнение, проверка',250],['Operations','выкатка и наблюдение',470]].map(([t,d,x])=>`
+<rect x="${x}" y="42" width="200" height="72" fill="${C.pp}" stroke="${C.ink}" stroke-width="1.5"/>
+<text x="${x+16}" y="72" font-size="17" font-weight="600" fill="${C.ink}">${t}</text>
+<text x="${x+16}" y="94" font-size="12.5" fill="${C.soft}">${d}</text>`).join('')}
+<path d="M232 78 L246 78" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M452 78 L466 78" stroke="${C.ink}" stroke-width="1.5" marker-end="url(#ar)"/>
+<path d="M570 118 L570 150 Q570 162 556 162 L144 162 Q130 162 130 150 L130 122" fill="none" stroke="${C.bp}" stroke-width="1.5" stroke-dasharray="5 4" marker-end="url(#ab)"/>
+<text x="350" y="182" font-size="12" fill="${C.bp}" text-anchor="middle">узнанное в проде возвращается в требования</text>
+<text x="30" y="26" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.6" fill="${C.bp}">ТРИ ФАЗЫ</text>
+</g>
+<defs>
+<marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="${C.ink}"/></marker>
+<marker id="ab" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 L8 4 L0 8 z" fill="${C.bp}"/></marker>
+</defs></svg><figcaption>Фазы идут последовательно, но цикл замкнут</figcaption></figure>`;
+
+FIG.compare=`<figure class="fig"><svg viewBox="0 0 700 230" role="img" aria-label="Сравнение: шесть недель против пяти дней">
+<g font-family="IBM Plex Sans,sans-serif">
+<text x="20" y="26" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.6" fill="${C.bp}">ОДНА И ТА ЖЕ ЗАДАЧА</text>
+<text x="20" y="56" font-size="13" font-weight="600" fill="${C.ink}">Сейчас · 30 рабочих дней</text>
+${[['Постановка',20,60,C.soft],['Требования',80,60,C.soft],['Разработка',140,120,C.ink],['Ревью',260,40,C.sig],['Тесты',300,120,C.sig],['Релиз',420,140,C.sig]].map(([t,x,w,c])=>`
+<rect x="${x+0}" y="68" width="${w-4}" height="30" fill="${c}" opacity="${c===C.ink?1:.85}"/>
+<text x="${x+2}" y="112" font-size="10.5" fill="${C.soft}">${t}</text>`).join('')}
+<text x="20" y="150" font-size="13" font-weight="600" fill="${C.ink}">AI-PDLC · 5 рабочих дней</text>
+${[['Разбор',20,40,C.bp],['Спека',60,20,C.bp],['План',80,20,C.bp],['Исполнение',100,60,C.ink],['Проверки',160,20,C.ok],['Выкатка',180,20,C.ok]].map(([t,x,w,c])=>`
+<rect x="${x}" y="162" width="${w-4}" height="30" fill="${c}"/>`).join('')}
+<text x="22" y="206" font-size="10.5" fill="${C.soft}">разбор · спека · план · исполнение · проверки · выкатка</text>
+<line x1="560" y1="60" x2="560" y2="200" stroke="${C.l}" stroke-width="1"/>
+<text x="576" y="86" font-size="12" fill="${C.sig}" font-weight="600">6 недель</text>
+<text x="576" y="180" font-size="12" fill="${C.ok}" font-weight="600">5 дней</text>
+</g></svg><figcaption>Красным — время в очередях, а не в работе</figcaption></figure>`;
+
+FIG.share=`<figure class="fig"><svg viewBox="0 0 700 180" role="img" aria-label="Доля кодирования в цикле разработки">
+<g font-family="IBM Plex Sans,sans-serif">
+<text x="20" y="26" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.6" fill="${C.bp}">ГДЕ УХОДИТ ВРЕМЯ ЦИКЛА</text>
+<rect x="20" y="46" width="160" height="42" fill="${C.hv}"/>
+<rect x="180" y="46" width="500" height="42" fill="${C.pp}" stroke="${C.l}"/>
+<text x="30" y="73" font-size="13.5" font-weight="600" fill="${C.ink}">Код 25%</text>
+<text x="196" y="73" font-size="13.5" fill="${C.soft}">Требования, ожидание, ревью, тесты, согласования, релизное окно — 75%</text>
+<rect x="20" y="106" width="80" height="42" fill="${C.hv}"/>
+<rect x="100" y="106" width="500" height="42" fill="${C.pp}" stroke="${C.l}"/>
+<text x="30" y="133" font-size="13" font-weight="600" fill="${C.ink}">12,5%</text>
+<text x="116" y="133" font-size="13" fill="${C.soft}">ускорили кодирование вдвое — цикл сократился на 12,5%</text>
+<line x1="620" y1="100" x2="620" y2="154" stroke="${C.sig}" stroke-width="1.5"/>
+<text x="632" y="136" font-size="12" fill="${C.sig}" font-weight="600">−12,5%</text>
+</g></svg><figcaption>Локальное ускорение почти не видно в сроках</figcaption></figure>`;
+
+FIG.lines=`<figure class="fig"><svg viewBox="0 0 700 220" role="img" aria-label="Три линии: решения, реализация, правила">
+<g font-family="IBM Plex Sans,sans-serif">
+<text x="20" y="26" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.6" fill="${C.bp}">ТРИ ЛИНИИ, РАБОТАЮЩИЕ ПАРАЛЛЕЛЬНО</text>
+${[['Решения','человек: что делаем и зачем',48,C.bp],['Реализация','агент: план, код, тесты',104,C.ink]].map(([t,d,y,c])=>`
+<rect x="20" y="${y}" width="560" height="42" fill="${C.pp}" stroke="${c}" stroke-width="1.5"/>
+<text x="34" y="${y+19}" font-size="14" font-weight="600" fill="${C.ink}">${t}</text>
+<text x="34" y="${y+35}" font-size="12" fill="${C.soft}">${d}</text>`).join('')}
+<rect x="20" y="160" width="560" height="42" fill="rgba(233,184,36,.18)" stroke="${C.ink}" stroke-width="1.5"/>
+<text x="34" y="179" font-size="14" font-weight="600" fill="${C.ink}">Правила</text>
+<text x="34" y="195" font-size="12" fill="${C.soft}">автопроверки, уровни прав, след действий — размазаны по всему процессу</text>
+${[70,126,182].map(y=>`<path d="M580 ${y} L616 ${y}" stroke="${C.l}" stroke-width="1.5"/>`).join('')}
+<rect x="618" y="48" width="62" height="154" fill="none" stroke="${C.l}" stroke-dasharray="4 4"/>
+<text x="649" y="122" font-size="11" fill="${C.soft}" text-anchor="middle" transform="rotate(90 649 122)">выпуск</text>
+</g></svg><figcaption>Контроль не отдельная стадия в конце, а третья линия</figcaption></figure>`;
+
+FIG.plan=`<figure class="fig"><svg viewBox="0 0 700 200" role="img" aria-label="План на три месяца">
+<g font-family="IBM Plex Sans,sans-serif">
+<text x="20" y="26" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.6" fill="${C.bp}">КВАРТАЛ</text>
+<line x1="30" y1="60" x2="670" y2="60" stroke="${C.l}" stroke-width="2"/>
+${[['Месяц 1','Один проход','список дыр + цена',30],['Месяц 2','Закрыть дыры','автопроверки, след, права',245],['Месяц 3','Ещё две команды','новый проект + легаси',460]].map(([m,t,d,x])=>`
+<circle cx="${x+6}" cy="60" r="7" fill="${C.ink}"/>
+<text x="${x}" y="94" font-size="11" font-family="IBM Plex Mono,monospace" letter-spacing="1.2" fill="${C.bp}">${m.toUpperCase()}</text>
+<text x="${x}" y="118" font-size="15" font-weight="600" fill="${C.ink}">${t}</text>
+<text x="${x}" y="140" font-size="12.5" fill="${C.soft}">${d}</text>`).join('')}
+<rect x="30" y="160" width="640" height="28" fill="rgba(233,184,36,.18)" stroke="${C.l}"/>
+<text x="44" y="179" font-size="12.5" fill="${C.ink}">Решение о масштабировании принимается только в конце квартала — на цифрах, а не на впечатлении</text>
+</g></svg><figcaption>Не масштабировать раньше срока</figcaption></figure>`;
+
+const COURSE = [
+{
+  n:'01', min:'4', title:'Что такое AI-PDLC',
+  kick:'Определение простыми словами, откуда это взялось и чем не является',
+  short:'что это вообще',
+  steps:[
+    {h:'Определение',html:`
+<p>AI-PDLC — это подход, при котором искусственный интеллект встроен во весь путь от идеи до работающего продукта, а не только в момент написания кода. Аббревиатура <abbr data-t="pdlc">PDLC</abbr> — Product Development Life Cycle, жизненный цикл продукта, и буква P здесь принципиальна: разговор идёт не про кодирование, а про весь путь от проблемы клиента до эксплуатации.</p>
+<p>Ключевая перестановка ролей выглядит так. Раньше человек писал, а инструмент подсказывал. Теперь агент предлагает — требования, план, код, тесты, конфигурацию инфраструктуры — а человек проверяет и принимает решение до того, как предложенное будет исполнено.</p>
+<p>Источников у подхода два, и они удачно дополняют друг друга. <strong>AWS</strong> в июле 2025 года опубликовала методологию <abbr data-t="aidlc">AI-DLC</abbr> (AI-Driven Development Life Cycle) с конкретным рабочим процессом и в ноябре выложила её правила в открытый доступ. <strong>Сбер</strong> в 2026 году выпустил разбор того, как это встраивается в зрелый корпоративный контур, где есть регулятор, служба безопасности и релизные гейты. Первое отвечает на вопрос «как делать», второе — «как это переживёт нашу компанию».</p>`},
+    {h:'Из чего состоит',html:`
+<p>Процесс делится на три фазы. Названия английские, но смысл простой.</p>
+<ul>
+<li><strong>Inception</strong> — превращение пожелания бизнеса в требования и понятные куски работы. Разбирает это не один аналитик наедине с документом, а команда: агент задаёт уточняющие вопросы, люди на них отвечают. Практика называется <abbr data-t="mob">mob elaboration</abbr> — совместный разбор требований</li>
+<li><strong>Construction</strong> — агент показывает план, команда его утверждает, агент исполняет, результат проверяют перед следующим куском</li>
+<li><strong>Operations</strong> — выкатка, наблюдение за системой в проде и возврат накопленного знания обратно в требования</li>
+</ul>
+<p>Заодно меняются два привычных слова. Вместо спринта появляется цикл длиной в часы или дни — его называют <abbr data-t="bolt">болтом</abbr> (bolt). Вместо эпика — <abbr data-t="uow">unit of work</abbr>, единица работы: кусок такого размера, который агент способен удержать целиком.</p>
+${FIG.phases}
+<div class="note"><span class="lbl">Почему спринты вообще существовали</span>Двухнедельный спринт в классическом <abbr data-t="sdlc">SDLC</abbr> (Software Development Life Cycle) придумали не потому, что это идеальный ритм разработки. Согласовывать работу людей дорого, и эти издержки выгоднее платить раз в две недели, чем каждый день. Если планы и код появляются за часы, платить за пакетирование больше не нужно — и вся конструкция спринта теряет смысл.</div>`},
+    {h:'Чем это не является',html:`
+<p>Три уточнения, которые снимают половину недопонимания на входе.</p>
+<p><strong>Это не продукт и не подписка.</strong> Методология AWS поставляется как набор текстовых правил для агента. Работает с тем, что у вас уже есть: Cursor, Claude Code, Copilot, Amazon Q и другими. Покупать отдельно нечего, и это же означает, что никто не придёт внедрять её за вас.</p>
+<p><strong>Это не про замену разработчиков.</strong> Роль человека смещается с написания на проверку и принятие решений, и людей эта работа требует не меньше, а иногда больше — просто других. Подробно об этом седьмой модуль, потому что вопрос обычно первый по важности для владельца.</p>
+<p><strong>Это не отмена контроля.</strong> Наоборот, проверок становится больше, но они распределяются по процессу и выполняются автоматически, вместо того чтобы копиться к релизу. Шестой модуль как раз про то, как это уживается с безопасностью и регулятором.</p>`}
+  ],
+  quiz:[
+    {q:'Что означает буква P в аббревиатуре и почему она важна?',
+     a:['Programming — речь идёт только о написании кода и работе в редакторе','Product — охватывается весь путь от проблемы клиента до эксплуатации','Process — имеется в виду порядок согласований между подразделениями'],
+     c:1,why:'Отличие от разговора про ассистента в редакторе именно в охвате: требования, планирование, тестирование, выкатка и эксплуатация, а не только момент написания кода.'},
+    {q:'Как распределяются роли человека и агента?',
+     a:['Агент подсказывает по ходу набора, а постановку и код по-прежнему держит человек','Агент предлагает требования, план, код и тесты, человек проверяет и решает до исполнения','Агент работает полностью самостоятельно, а человек смотрит только итоговый результат в конце работы'],
+     c:1,why:'Это перестановка по сравнению с ассистентом в редакторе. Инициатива у агента, за человеком остаётся проверка и решение — и именно она становится узким местом.'},
+    {q:'Что покупает компания, когда решает внедрять AI-DLC от AWS?',
+     a:['Лицензию на платформу, обучение команды и поддержку от поставщика методологии на первый год','Ничего: методология открыта и поставляется правилами для агента, которого вы уже используете','Подписку на облако AWS с его инструментами разработки и сопровождением от поставщика на год'],
+     c:1,why:'Правила лежат в открытом репозитории и работают с Cursor, Claude Code, Copilot и другими. Оборотная сторона в том, что готового поставщика внедрения не будет.'},
+    {q:'Почему спринты перестают быть нужны?',
+     a:['Морально устарели вместе с остальными гибкими практиками и почти не применяются','Спринт окупал дорогое согласование работы людей, а при цикле в часы платить за пакетирование не нужно','Гибкие методологии несовместимы с агентами, поэтому от них отказываются целиком и сразу'],
+     c:1,why:'Двухнедельный ритм был способом амортизировать издержки координации. Когда планы появляются за часы, конструкция теряет экономический смысл.'}
+  ]
+},
+{
+  n:'02', min:'6', title:'Чем отличается от привычного процесса',
+  kick:'Одна и та же задача проходит через два процесса — смотрим, что меняется',
+  short:'сравнение на примере',
+  steps:[
+    {h:'Задача и то, как она идёт сейчас',html:`
+<p>Сразу оговорюсь: цифры ниже — иллюстрация типичного расклада, а не замер конкретного проекта. У вас будет своя раскладка, и именно её надо будет снять на первом проходе. Возьмём обычную задачу среднего размера: добавить в личный кабинет выгрузку истории операций в CSV с фильтром по датам. Не тривиально — нужны требования, работа с большим объёмом данных, ограничение доступа, тесты, релиз.</p>
+<div class="track now">
+  <div class="track-h"><span>Как это идёт сейчас</span><span class="tot">≈ 6 недель</span></div>
+  <div class="leg"><span class="d">нед. 1</span><span class="w"><b>Постановка</b><i>Продакт пишет задачу, аналитик уточняет, часть вопросов уходит в переписку и ждёт ответа</i></span></div>
+  <div class="leg"><span class="d">нед. 2</span><span class="w"><b>Требования и оценка</b><i>Аналитик оформляет, архитектор смотрит, команда оценивает на груминге, задача попадает в спринт</i></span></div>
+  <div class="leg"><span class="d">нед. 3–4</span><span class="w"><b>Разработка</b><i>Бэкенд и фронтенд, по ходу выясняется, что часть требований противоречива — возврат к аналитику</i></span></div>
+  <div class="leg"><span class="d">нед. 4</span><span class="w"><b>Ревью</b><i>Диффы висят два дня: коллега занят своей задачей</i></span></div>
+  <div class="leg"><span class="d">нед. 5</span><span class="w"><b>Тестирование</b><i>Тестировщик собирает данные для проверки, находит дефекты, круг повторяется</i></span></div>
+  <div class="leg"><span class="d">нед. 6</span><span class="w"><b>Согласования и релиз</b><i>Безопасность смотрит выгрузку персональных данных, задача ждёт релизного окна</i></span></div>
+</div>
+<p>Обратите внимание, где именно уходит время. Собственно написание кода занимает здесь дней пять из тридцати. Всё остальное — ожидание, переключение между людьми и обнаружение проблем позже, чем их можно было обнаружить.</p>`},
+    {h:'Та же задача в новом процессе',html:`
+<div class="track next">
+  <div class="track-h"><span>Как это идёт в AI-PDLC</span><span class="tot">≈ 5 дней</span></div>
+  <div class="leg"><span class="d">день 1</span><span class="w"><b>Разбор с агентом</b><i>Агент задаёт уточняющие вопросы по задаче: что делать с операциями в разных валютах, какой лимит на период выгрузки, кто имеет право видеть чужие операции. Продакт, аналитик и разработчик отвечают на одной встрече</i></span></div>
+  <div class="leg"><span class="d">день 1</span><span class="w"><b>Спецификация</b><i>Агент оформляет требования, команда вычитывает и правит. Дальше именно этот документ будет источником для кода и тестов</i></span></div>
+  <div class="leg"><span class="d">день 2</span><span class="w"><b>План</b><i>Агент предлагает разбивку на куски и порядок работ. Команда смотрит и утверждает — это и есть основная точка контроля</i></span></div>
+  <div class="leg"><span class="d">дни 2–4</span><span class="w"><b>Исполнение кусками</b><i>Каждый кусок: код, тесты, проверка политик безопасности. Результат смотрят до перехода к следующему</i></span></div>
+  <div class="leg"><span class="d">день 4</span><span class="w"><b>Проверки</b><i>Автоматический регресс, проверка на утечку персональных данных, проверка выгрузки на <abbr data-t="golden">golden dataset</abbr>, эталонном наборе сценариев — всё запускается само</i></span></div>
+  <div class="leg"><span class="d">день 5</span><span class="w"><b>Выкатка</b><i>К задаче приложен <abbr data-t="evidence">evidence bundle</abbr>, комплект доказательств: спецификация, результаты проверок, след действий агента. Безопасности есть что смотреть, и смотрит она готовое</i></span></div>
+</div>
+${FIG.compare}
+<p>Разница не в том, что кто-то печатал быстрее. Изменились три вещи: противоречия в требованиях всплыли в первый день, а не на третьей неделе; проверки перестали ждать освободившегося человека; согласование получило готовый комплект документов вместо запроса «посмотрите, пожалуйста».</p>
+<p>Свойство, к которому здесь стремятся, называют <abbr data-t="zf">zero friction</abbr> — отсутствие организационных швов на пути от задумки до выпуска: ни отдельной стадии ревью, ни передачи работы между функциями, ни ожидания согласований. Проверки при этом никуда не деваются, они просто выполняются внутри шага, а не копятся к релизу.</p>`},
+    {h:'Где выигрыш испаряется',html:`
+<p>Честная часть сравнения. Пятидневный вариант получается не всегда и не у всех, и вот при каких условиях он превращается обратно в шестинедельный.</p>
+<table>
+<tr><th>Условие</th><th>Что происходит</th></tr>
+<tr><td>Нет <abbr data-t="cicd">CI/CD</abbr> и автоматического регресса</td><td>День 4 превращается в неделю ручного тестирования</td></tr>
+<tr><td>Безопасность подключается вручную и в конце</td><td>День 5 упирается в очередь согласования, как и раньше</td></tr>
+<tr><td>Релизы раз в три недели</td><td>Задача готова за пять дней и ждёт окна ещё две недели</td></tr>
+<tr><td>Код монолитный, без внятных границ</td><td>Агент вынужден держать в голове слишком много, качество плана падает</td></tr>
+<tr><td>Некому вычитывать спецификацию</td><td>Ошибка в требованиях уходит в код, тесты её подтверждают, дефект находит клиент</td></tr>
+</table>
+<div class="note field"><span class="lbl">Практический вывод</span>Посмотрите на этот список как на чек-лист собственной готовности. Каждая строка, которая про вас, — это конкретная работа, которую придётся сделать до внедрения, а не после. И именно поэтому компании с выстроенным <abbr data-t="cicd">CI/CD</abbr>, автотестами и короткими релизными циклами получают эффект быстро, а компании с ручным регрессом и релизами раз в квартал сначала не получают его вовсе.</div>`}
+  ],
+  quiz:[
+    {q:'В примере с выгрузкой в CSV основное время в старом процессе уходит на:',
+     a:['Написание кода разработчиками бэкенда и фронтенда','Ожидание, переключение между людьми и позднее обнаружение проблем','Согласование бюджета и приоритетов с бизнес-заказчиком'],
+     c:1,why:'Собственно кодирование занимает около пяти дней из тридцати. Остальное — очереди и переделки из-за того, что противоречия в требованиях всплыли поздно.'},
+    {q:'Что в новом процессе даёт основной выигрыш?',
+     a:['Агент печатает код значительно быстрее человека, и именно за счёт этого сокращается общий срок','Противоречия всплывают в первый день, проверки не ждут людей, согласование получает готовый комплект','Сокращается число участников процесса, а значит и время на согласование между ними'],
+     c:1,why:'Скорость печати почти не влияет на срок. Влияет то, на каком этапе обнаруживается ошибка и сколько работа проводит в очередях.'},
+    {q:'Компания выкатывает релизы раз в три недели. Что будет с пятидневным циклом?',
+     a:['Ничего, релизный процесс не связан с разработкой','Задача будет готова за пять дней и две недели ждать окна','Релизы автоматически участятся'],
+     c:1,why:'Ускорение упирается в самое медленное звено. Пока релизное окно не изменилось, выигрыш от короткого цикла разработки просто не виден бизнесу.'},
+    {q:'Почему компаниям с ручным регрессом эффект приходит позже?',
+     a:['Их разработчики хуже подготовлены к работе с новыми инструментами и дольше переучиваются','Автоматических проверок нет, поэтому этап тестирования остаётся человеческим и съедает выигрыш','Методология требует конкретного облачного провайдера, а у таких компаний обычно стоит другой'],
+     c:1,why:'Проверка перестаёт быть узким местом только когда она автоматическая. При ручном регрессе задача снова упирается в доступность тестировщика.'}
+  ]
+},
+{
+  n:'03', min:'4', title:'Почему «купили ассистента» не сработало',
+  kick:'Арифметика цикла, эффект масштаба и цена скорости без контроля',
+  short:'экономика',
+  steps:[
+    {h:'Простой расчёт, который объясняет разочарование',html:`
+<p>Типичная история: команде выдали доступ к ассистенту, разработчики довольны, код пишется заметно быстрее. Через полгода смотрим на сроки выхода фич — они примерно те же.</p>
+<p>Загадки тут нет. Посчитайте долю цикла, которую занимает написание кода: обычно четверть, в лучшем случае треть. Ускорили эту часть вдвое — весь цикл сократился на 12–15%. На фоне обычного разброса сроков этого просто не видно.</p>
+<p>Дальше происходит закономерное: узкое место переезжает дальше по конвейеру. Теперь разработчики ждут тестировщиков, а не наоборот, и общий срок опять определяется не ими.</p>
+${FIG.share}
+<div class="note"><span class="lbl">Что показывают данные</span>Компании, применяющие ИИ в десяти и более местах жизненного цикла, сообщают об ускорении выхода на рынок в 66% случаев. У тех, кто применяет его в пяти местах или меньше, таких только 35% (данные приводятся в whitepaper Сбера, 2026; ссылка в источниках). Отдача появляется от покрытия цикла целиком — и это меняет предмет разговора с выбора инструмента на перестройку процесса.</div>`},
+    {h:'Скорость в долг',html:`
+<p>Есть и обратная сторона. Генерация ускоряет написание примерно на треть, но если ревью осталось прежним, в код попадает примерно на четверть больше уязвимостей. Цифра приводится в whitepaper Сбера со ссылкой на отраслевые замеры; в следующем модуле разберём данные подробнее, включая те, что противоречат оптимистичным оценкам. Выигранное время возвращается разборами инцидентов, только позже и дороже.</p>
+<p>В крупной компании это чувствуется сильнее, чем в стартапе. Ваш процесс тихо содержит контроли, которые вы перестали замечать: коллега смотрит диффы, в системах остаётся след, релиз проходит приёмо-сдаточные испытания, перед выкаткой проверяется план отката. Все они рассчитаны на человеческую скорость. Когда план, код и тесты появляются за день, механизмы не успевают сработать, а замены им пока нет.</p>
+<p>Отсюда правило, вокруг которого построен весь курс: ускорение и контроль внедряются вместе. По отдельности в регулируемом контуре не работает ни то, ни другое.</p>`},
+    {h:'Договоритесь заранее, что считать результатом',html:`
+<p>Если этого не сделать, через квартал разговор об эффекте превратится в обмен впечатлениями. Сразу отсеките метрики, которые выглядят убедительно и ничего не показывают.</p>
+<table>
+<tr><th>Соблазн измерить</th><th>Что не так</th><th>Чем заменить</th></tr>
+<tr><td>Объём сгенерированного кода</td><td>Растёт, когда качество падает</td><td><abbr data-t="ttm">TTM</abbr> (Time to Market) — время от идеи до прода</td></tr>
+<tr><td>Долю принятых подсказок</td><td>Про инструмент, а не про результат</td><td>Долю релизов с откатом и дефектами</td></tr>
+<tr><td>Сэкономленные часы по опросу</td><td>Люди искренне переоценивают экономию</td><td>Частоту деплоев и <abbr data-t="mttr">MTTR</abbr> (время восстановления)</td></tr>
+</table>
+<div class="note field"><span class="lbl">История из жизни</span>В одной компании время тестирования сократилось на 30%, и это записали на счёт ИИ-ассистентов — их внедряли в том же квартале, связь казалась очевидной. При разборе выяснилось, что эффект дал отдельный инструмент, генерировавший тестовые данные, написанный раньше и без всякого ИИ. Полный разбор случая — в восьмом модуле, там он важнее, чем кажется.</div>`}
+  ],
+  quiz:[
+    {q:'Написание кода занимает 25% цикла, его ускорили вдвое. Что с общим сроком?',
+     a:['Сократится примерно вдвое','Сократится примерно на 12%','Не изменится вообще'],
+     c:1,why:'Половина от четверти — восьмая часть цикла. Эффект настоящий, но такой, что тонет в обычном разбросе сроков.'},
+    {q:'О чём говорит разрыв 66% против 35%?',
+     a:['О том, что эффект пропорционален числу купленных лицензий на команду','Об отдаче от покрытия цикла целиком, а не от отдельных внедрений','О том, что больше пяти сценариев применения внедрять уже бессмысленно'],
+     c:1,why:'Точечное внедрение даёт локальный выигрыш, который съедается следующим этапом. Эффект проявляется, когда покрыт весь путь.'},
+    {q:'Почему ускорение без изменения контроля особенно рискованно в крупной компании?',
+     a:['Модели хуже справляются с большими кодовыми базами, а в крупных компаниях они как раз такие','Привычные контроли рассчитаны на человеческую скорость и перестают срабатывать','Регулятор прямо запрещает использовать сгенерированный код в системах, работающих с деньгами'],
+     c:1,why:'Ревью коллегой, ПСИ, план отката, аудиторский след — всё это работает в человеческом темпе. При цикле в один день механизмы не успевают, а замены нет.'}
+  ]
+},
+{
+  n:'04', min:'7', title:'Что говорят исследования',
+  kick:'Честная картина: где данные подтверждают эффект, а где опровергают',
+  short:'данные и споры',
+  steps:[
+    {h:'Самое строгое исследование даёт неудобный результат',html:`
+<p>Прежде чем идти дальше, стоит посмотреть на данные — включая те, что противоречат бодрым заголовкам. Иначе первый же подготовленный собеседник разнесёт вашу презентацию.</p>
+<p>Самая строгая работа на эту тему — рандомизированное контролируемое испытание лаборатории METR, опубликованное в июле 2025 года. Шестнадцать опытных разработчиков открытых проектов, 246 настоящих задач на репозиториях в среднем по миллиону строк. Результат: с ИИ-инструментами задачи заняли <strong>на 19% больше времени</strong>. При этом сами участники были уверены, что ускорились примерно на 20%.</p>
+<p>Разрыв между ощущением и замером — почти сорок процентных пунктов. Это и есть главный практический вывод: <strong>самооценка в этой области не работает вообще</strong>. В феврале 2026 METR опубликовала уточнение: в повторном замере оценки сместились, а из-за сильных эффектов отбора лаборатория меняет дизайн исследования. То есть точная цифра под вопросом — но вывод про самооценку остаётся.</p>
+<div class="note warn"><span class="lbl">Что из этого следует немедленно</span>Никогда не принимайте решение о масштабировании по опросу команды. «Ребята говорят, стало быстрее» — это не данные, и METR показала это в контролируемом эксперименте. Считайте по системам: время до прода, доля откатов, стоимость прохода.</div>`},
+
+    {h:'DORA: ускорение обнажает слабости',html:`
+<p>Ежегодное исследование DORA — самый представительный источник по доставке ПО. Его выводы менялись, и эта динамика полезнее любой отдельной цифры.</p>
+<table>
+<tr><th>Год</th><th>Что показали данные</th></tr>
+<tr><td><strong>2024</strong></td><td>На каждые 25% роста внедрения ИИ — снижение пропускной способности примерно на 1,5% и стабильности поставки на 7,2%. То есть и медленнее, и ломается чаще</td></tr>
+<tr><td><strong>2025</strong></td><td>Знак по пропускной способности сменился на положительный: команды научились. Но связь со <strong>стабильностью осталась отрицательной</strong>. Доля разработчиков, использующих ИИ, выросла с 76% до 90%</td></tr>
+</table>
+<p>Формулировка самих авторов: ИИ ускоряет разработку, и это ускорение обнажает слабости ниже по потоку. Без надёжных систем контроля — автотестов, зрелой работы с версиями, быстрой обратной связи — рост объёма изменений ведёт к нестабильности.</p>
+<p>Механизм назвали <strong>налогом на верификацию</strong>: время, сэкономленное на наборе кода, не исчезает, а перемещается вниз по потоку — в ревью и проверку. Большинство конвейеров на такой объём не рассчитаны. Телеметрия Faros по 22 тысячам разработчиков за 2026 год: медианное время в ревью выросло на 441%, размер запросов на слияние — на 51%, и на 31% больше изменений вливается вообще без ревью.</p>
+<div class="note"><span class="lbl">Ключевая метафора DORA</span>ИИ работает как усилитель. Он умножает и сильные стороны зрелой организации, и дисфункции слабой. Если у вас плохо с тестами и ревью — вы получите те же проблемы, только больше и быстрее. Это ровно то, о чём предыдущие модули.</div>`},
+
+    {h:'Где эффект есть, а где его нет',html:`
+<p>Сложить данные вместе можно так: результат сильно зависит от того, что за работа и какая кодовая база.</p>
+<table>
+<tr><th>Где выигрыш заметный</th><th>Где выигрыша может не быть</th></tr>
+<tr><td>Новые проекты и модули с нуля</td><td>Зрелая кодовая база, которую разработчик знает наизусть</td></tr>
+<tr><td>Типовой код, обвязка, каркасы</td><td>Задачи с высокой планкой качества и сложным контекстом</td></tr>
+<tr><td>Тесты, документация, миграции по образцу</td><td>Работа, где 80% времени — это понять, а не написать</td></tr>
+<tr><td>Разбор требований и поиск противоречий</td><td>Узкие места вне разработки: согласования, релизное окно</td></tr>
+</table>
+<p>При этом ускорение отдельного разработчика и ускорение поставки — разные вещи. Индивидуальная выработка растёт почти у всех: по данным Anthropic за 2025 год, около +50% к производительности в самооценке и +67% слитых запросов на слияние в день. А вот доходит ли это до бизнеса, зависит от того, есть ли у вас автопроверки, короткое релизное окно и способность быстро откатываться.</p>
+<div class="note field"><span class="lbl">И ещё: это молодой процесс</span>Методологии, о которых идёт речь, появились в 2025–2026 годах. Практики применения ещё формируются, отраслевого стандарта нет, и через год многое будет выглядеть иначе — какие-то термины отвалятся, какие-то шаги окажутся лишними. Это нормально для любой новой инженерной дисциплины: непрерывная интеграция тоже проходила этот путь. Поэтому относитесь к описанному как к рабочей версии, а не как к устоявшемуся канону — и проверяйте на своих цифрах, а не на чужих.</div>`}
+  ],
+  quiz:[
+    {q:'Что показало контролируемое испытание METR на опытных разработчиках?',
+     a:['Ускорение примерно на 20%, полностью совпавшее с ожиданиями самих участников эксперимента','Замедление примерно на 19% при уверенности участников, что они ускорились','Никакой значимой разницы между работой с инструментами и без них не обнаружилось'],
+     c:1,why:'Разрыв между ощущением и замером — около сорока процентных пунктов. Отсюда практический вывод: опрос команды не является данными о продуктивности.'},
+    {q:'Как менялись выводы DORA с 2024 по 2025 год?',
+     a:['Оба показателя ухудшались и в 2024, и в 2025 году, динамика не изменилась','Пропускная способность из отрицательной стала положительной, а стабильность осталась отрицательной','Оба показателя стали положительными, и в отрасли эту проблему считают полностью закрытой'],
+     c:1,why:'Команды научились применять инструменты, и скорость выросла. Но ускорение по-прежнему обнажает слабости ниже по потоку — без надёжного контроля рост объёма изменений ведёт к нестабильности.'},
+    {q:'Что называют налогом на верификацию?',
+     a:['Плату за использование моделей, которая растёт с объёмом генерации','Перемещение сэкономленного времени вниз по потоку — в ревью и проверку','Стоимость обучения команды новым инструментам и процессам'],
+     c:1,why:'Усилия, сэкономленные на наборе кода, не исчезают. Телеметрия показывает рост времени в ревью и увеличение размера изменений — конвейеры не рассчитаны на такой объём.'},
+    {q:'Почему нельзя принимать решение о масштабировании по опросу команды?',
+     a:['Люди склонны занижать собственные результаты из скромности, и цифра выходит хуже реальной','Самооценка в этой области расходится с замером на десятки процентных пунктов','Опросы сотрудников бесполезны для любых управленческих решений в принципе'],
+     c:1,why:'Это показано в контролируемом эксперименте: участники были уверены в ускорении, а часы показывали замедление. Считать надо по системам.'},
+    {q:'Где выигрыш от агентов обычно наименьший?',
+     a:['В новых проектах, которые пишутся с чистого листа','На зрелой кодовой базе, которую разработчик знает наизусть','В написании тестов, документации и типовых миграций'],
+     c:1,why:'Когда основное время уходит на то, чтобы понять, а не написать, генерация помогает мало — а накладные расходы на проверку остаются.'}
+  ]
+},
+
+{
+  n:'05', min:'5', title:'Куда вкладывать деньги',
+  kick:'Почему бюджет идёт в окружение агента, а не в подписки',
+  short:'предмет инвестиций',
+  steps:[
+    {h:'Что такое окружение и почему оно решает',html:`
+<p>Формулировка, вокруг которой строится подход: <abbr data-t="llm">LLM</abbr> определяет качество в худшем случае, а окружение — каким оно может стать в лучшем.</p>
+<p>Под окружением — на английском <abbr data-t="harness">harness</abbr> — понимают всё, что вокруг модели: какие инструменты ей доступны, какой контекст она получает, что помнит между сессиями, какие стоят ограничители, какая собирается телеметрия. Хорошее окружение со средней моделью обычно обгоняет сильную модель без окружения.</p>
+<p>Для владельца отсюда следует практичный вывод про деньги. Вложения в окружение работают и на следующем поколении моделей — вы просто меняете компонент. Вложения в подписки не накапливаются: сменилось поколение, и вы там же, где были.</p>
+<div class="note field"><span class="lbl">Проверьте на известном кейсе</span>Самая цитируемая цифра методологии — переделка сервиса Amazon Bedrock, о которой AWS рассказала в собственном блоге: оценивали в 18 месяцев на 30 разработчиков, сделали шестеро за 76 дней, сто тысяч строк рабочего кода. Это заявление вендора о своём проекте, а не независимая проверка, — но условия описаны подробно, и они интереснее самой цифры. Разберите условия: монорепозиторий, код нарезан на мелкие изолированные модули, чтобы агенту нужно было держать в голове меньше, язык выбран за понятные сообщения об ошибках. Ни одно из решений не про выбор модели, все три — про окружение.</div>`},
+    {h:'Спецификация становится главным документом',html:`
+<p>Подход называется <abbr data-t="sdd">SDD</abbr> (Spec-Driven Development). Смысл в том, что источником истины делается спецификация, а код, тесты и документация порождаются из неё. Нужно что-то изменить — меняется спецификация, а не код напрямую.</p>
+<p>Два следствия, и второе интереснее.</p>
+<ul>
+<li>Документация перестаёт отставать от кода, потому что она теперь выше по течению, а не отчёт постфактум</li>
+<li>Проверка переезжает на уровень требований. Из неправильно понятого требования получается совершенно корректный, рабочий и при этом неправильный код — и на ревью диффа это уже не поймать</li>
+</ul>
+<p>Второе меняет требования к людям сильнее, чем кажется. Умение вычитать спецификацию на противоречия становится дороже умения вычитывать диффы, и это стоит учитывать, планируя, кого растить и кого нанимать.</p>
+<p><strong>Как это выглядит на практике.</strong> Спецификация — не тридцать страниц текста. Обычно это документ на одну-две страницы примерно такой структуры:</p>
+<pre># Выгрузка истории операций в CSV
+
+<b>## Зачем</b>
+Клиенты просят выгрузку для подачи в налоговую и для
+личного учёта. Сейчас пишут в поддержку — около 400
+обращений в месяц.
+
+<b>## Что делает</b>
+В личном кабинете на странице истории появляется кнопка
+«Скачать CSV». Пользователь выбирает период, получает файл
+со своими операциями за этот период.
+
+<b>## Правила</b>
+- Только собственные операции пользователя
+- Период не больше 12 месяцев за одну выгрузку
+- Суммы в валюте операции, отдельная колонка — валюта
+- Отменённые операции включаются, с признаком в колонке
+- Файл в UTF-8 с BOM, разделитель — точка с запятой
+
+<b>## Чего система делать не должна</b>
+- Не выгружать операции по закрытым счетам других лиц
+- Не блокировать интерфейс: больше 10 тысяч строк —
+  готовим файл фоном и присылаем ссылку
+
+<b>## Как проверим</b>
+- Пользователь без операций получает файл с заголовками
+- Запрос чужого идентификатора возвращает отказ
+- Период 13 месяцев отклоняется с понятным сообщением
+- Выгрузка 50 тысяч строк не роняет страницу
+- Суммы в файле сходятся с суммами на экране</pre>
+<p>Обратите внимание на два последних раздела. «Чего система делать не должна» и «как проверим» — это то, что чаще всего забывают, и ровно то, из чего агент порождает тесты. Раздел «зачем» тоже не для красоты: он помогает и агенту, и человеку через полгода понять, почему сделано именно так.</p>
+<div class="note warn"><span class="lbl">Ловушка, о которой редко предупреждают</span>Агент пишет и код, и тесты к нему — из одного и того же понимания задачи. Если он понял требование неправильно, тесты подтвердят именно это неправильное понимание, и всё будет зелёным. Отсюда два практических правила. Первое: <strong>эталонные сценарии пишет человек</strong>, отдельно от агента и до генерации, — они и ловят расхождение. Второе: на ревью смотрите не «проходят ли тесты», а «те ли случаи они проверяют».</div>`},
+    {h:'Контекст стоит денег',html:`
+<p>Чем больше контекста — <abbr data-t="ctx">context window</abbr> — агенту нужно втянуть в себя, чтобы разобраться в задаче, тем дороже проход и тем ниже качество ответа. Отсюда неожиданный поворот в давнем споре про архитектуру.</p>
+<p>Раньше модульность обосновывали тем, что так удобнее читать человеку, и на бюджетном комитете это звучало неубедительно. Теперь у неё появилась вторая причина, которую можно посчитать: границы модулей задают объём контекста, а объём контекста прямо определяет стоимость каждого прохода агента и вероятность ошибки.</p>
+<div class="note"><span class="lbl">Что это значит для планирования</span>Работа по наведению порядка в коде — разделение на модули, внятные границы, автотесты — перестаёт быть внутренней технической прихотью и становится подготовкой инфраструктуры под новый способ производства. Разговаривать о ней с бизнесом теперь можно теми же словами, что и о закупке оборудования.</div>`}
+  ],
+  quiz:[
+    {q:'Что означает «окружение важнее модели»?',
+     a:['Слабые модели предпочтительнее сильных, потому что дешевле в эксплуатации','Модель задаёт качество в худшем случае, окружение определяет достижимый максимум','Выбор модели не имеет значения, все они дают примерно одинаковый результат'],
+     c:1,why:'Хорошее окружение со средней моделью обычно обгоняет сильную модель без окружения. И вложения в окружение переживают смену поколения моделей.'},
+    {q:'Почему вложения в подписки не накапливаются?',
+     a:['Подписки дорожают быстрее, чем растёт польза от них','Со сменой поколения моделей вы оказываетесь там же, где были, — актив не остаётся','Их нельзя учесть как капитальные затраты, а только как текущие расходы'],
+     c:1,why:'Инструменты, контекст, ограничители и телеметрия остаются вашими и работают с любой следующей моделью. Оплаченный доступ не оставляет после себя ничего.'},
+    {q:'Почему ревью переезжает с кода на требования?',
+     a:['Сгенерированный код становится нечитаемым, и проверять его бессмысленно','Из неправильно понятого требования получается корректный рабочий код, и на диффе ошибку не поймать','Ревью кода прямо запрещено методологией и заменяется проверкой агентом'],
+     c:1,why:'Ошибка в намерении не выглядит как ошибка в реализации. Поэтому умение вычитывать спецификацию становится ценнее умения вычитывать диффы.'},
+    {q:'Какой новый аргумент появился у наведения порядка в коде?',
+     a:['Читаемость кода для новых сотрудников, которых стало заметно сложнее вводить в курс дела','Границы модулей задают объём контекста, а он определяет стоимость и качество каждого прохода агента','Прямые требования регулятора к структуре и модульности программного обеспечения'],
+     c:1,why:'Впервые архитектурная работа обосновывается на языке бюджета: это подготовка инфраструктуры под новый способ производства.'}
+  ]
+},
+{
+  n:'06', min:'5', title:'Контроль, безопасность, регулятор',
+  kick:'Как ускориться и не потерять то, за что отвечает совет директоров',
+  short:'риски и надзор',
+  steps:[
+    {h:'Третья линия, о которой обычно забывают',html:`
+<p>У процесса две очевидные линии: решения о том, что делать и зачем — здесь человек, и реализация — здесь агент. Третья менее заметна, но в большой компании определяет всё: правила, по которым это происходит.</p>
+<p>Особенность в том, что правила размазаны по всему процессу, а не собраны в отдельную стадию согласования. Существуют они в виде автоматических проверок, разных уровней прав для агента и следа, который остаётся от каждого действия.</p>
+${FIG.lines}
+<div class="note"><span class="lbl">Аналогия для разговора с советом директоров</span>Гонка. В боксе продумывают стратегию — это решения. Пилот ведёт машину и выбирает траекторию — это реализация. Телеметрия по температуре тормозов говорит, правильно ли мы едем. А стены, штраф за срезание, ограничение скорости на пит-лейне и обязательный логгер на борту — правила, по которым вообще можно ехать. Пилот не сбрасывает скорость оттого, что телеметрия и регламент работают параллельно. Но без них он либо разложит машину, либо его снимут с гонки.</div>`},
+    {h:'Права агента зависят от того, что он может испортить',html:`
+<p>Основной инструмент — <abbr data-t="r05">R0–R5</abbr>, лестница разрешений агента. Уровень определяет, где требуется подтверждение человека, какие включены ограничители и нужна ли отдельная автоматическая проверка результата.</p>
+<p style="font-size:15px;color:var(--ink-45)">Формулировки уровней ниже — рабочая адаптация под привычный корпоративный язык, а не дословная выдержка из первоисточника. Названия уровней в разных источниках расходятся; важна логика, а не буквы.</p>
+<table>
+<tr><th>Уровень</th><th>Что делает агент</th><th>Кто подтверждает</th><th>Где уместно</th></tr>
+<tr><td><strong>R0</strong><br>подсказка</td><td>Предлагает варианты, ничего не меняет</td><td>Всё делает человек</td><td>Незнакомый домен, первые недели работы команды</td></tr>
+<tr><td><strong>R1</strong><br>черновик</td><td>Готовит изменение: код, спецификацию, тесты</td><td>Человек проверяет и применяет сам</td><td>Любые изменения в критичных системах</td></tr>
+<tr><td><strong>R2</strong><br>по шагам</td><td>Исполняет, но останавливается на каждом действии</td><td>Человек на каждом шаге</td><td>Миграции данных, необратимые операции</td></tr>
+<tr><td><strong>R3</strong><br>по плану</td><td>Исполняет утверждённый план целиком</td><td>Человек один раз — на плане</td><td>Основной рабочий режим для обычных задач</td></tr>
+<tr><td><strong>R4</strong><br>в домене</td><td>Работает самостоятельно в очерченной области</td><td>Автопроверки блокируют, человек смотрит выборочно</td><td>Обновление зависимостей, рефакторинг, тесты</td></tr>
+<tr><td><strong>R5</strong><br>автономно</td><td>Действует без предварительного согласования</td><td>Guardian-агенты и аудит по факту</td><td>Обратимые действия с низкой ценой ошибки</td></tr>
+</table>
+<p>Уровень назначается <strong>типу действия, а не команде и не агенту</strong>. В одном и том же продукте правка текста в справке может идти на R5, изменение схемы базы — на R2, а изменение условий действующего договора не поднимется выше R1 никогда.</p>
+<div class="note field"><span class="lbl">Как это заполнять у себя</span>Выпишите десяток типовых действий вашей команды и ответьте на два вопроса по каждому: сколько времени займёт откат и кто заметит ошибку — автоматика, сотрудник или клиент. Если откат дороже минут или ошибку первым видит клиент, выше R2 не поднимайтесь. Это первая практическая работа, которую стоит сделать до внедрения, а не после.</div>
+<p>Ключевое: уровень назначается по обратимости действия, а не по тому, насколько вы довольны командой или моделью. Поправить текст в справке и изменить процентную ставку по действующему договору не могут иметь одинаковых прав ни при каких обстоятельствах.</p>
+<div class="note warn"><span class="lbl">Approval fatigue — ловушка избыточного контроля</span>У этого состояния есть устоявшееся название — <abbr data-t="af">approval fatigue</abbr>. Если подтверждений становится слишком много, люди начинают нажимать «да» не читая. Формально контроль есть, фактически его нет, и это хуже отсутствия: вы уверены, что защищены, а в аудиторском следе стоят подписи, которые ничего не означают. Подтверждений должно быть мало, и каждое — на действии, которое человек реально способен оценить за отведённое время.</div>`},
+    {h:'Что придётся закрыть в российском контуре',html:`
+<p>Когда людей на ручную проверку перестаёт хватать, контроль масштабируют такими же агентами — их называют <abbr data-t="guardian">Guardian Agents</abbr>, агенты-стражи: их задача — смотреть на результат основного, сверять с политиками, блокировать опасное и фиксировать след. Службу безопасности они не заменяют, а снимают с неё рутину.</p>
+<p>Рядом стоит идея <abbr data-t="pac">policy-as-code</abbr>, политики как код — записывать требования как исполняемые правила, а не как документ в вики. Для регулируемой отрасли это единственный работающий путь: ограничение либо проверяется автоматически, либо не соблюдается.</p>
+<ul>
+<li>Персональные данные — включая те, что попадают в контекст агента и в логи</li>
+<li>Где хранятся данные и какие модели вообще допустимы для вашего контура</li>
+<li>След действий агента в виде, который можно показать проверяющему</li>
+<li>Требования безопасности как автоматические проверки, а не согласование в конце</li>
+<li>Новые типы угроз, которых не было в обычной разработке — о них ниже</li>
+</ul>
+<div class="note warn"><span class="lbl">Три угрозы, которых раньше не было</span><strong>Внедрение инструкций через данные.</strong> Агент читает тикет, письмо, страницу в интернете — и текст оттуда может содержать команду, которую агент выполнит как указание. Лечится тем, что данные и инструкции разделены, а действия ограничены правами уровня.<br><br><strong>Цепочка поставок.</strong> Агент подключает библиотеки. Он может поставить пакет с похожим названием или тот, которого не существует, но который кто-то уже создал специально под такие ошибки. Нужен разрешённый список источников и проверка зависимостей в конвейере.<br><br><strong>Утечка через контекст.</strong> В контекст агента попадает больше, чем вы думаете: куски базы, конфиги, ключи из переменных окружения. Проверьте отдельно, что уходит наружу и что остаётся в логах.</div>
+<div class="note field"><span class="lbl">Скорее всего, половина у вас уже есть</span>Если в контуре работают <abbr data-t="psi">ПСИ</abbr> — приёмо-сдаточные испытания — с участием безопасности и сопровождения, протестированный план отката, маскирование данных и логов, журнал аудита — вы уже живёте по принципу «контроль встроен, а не пришит в конце». Задача не построить всё заново, а перевести существующее на скорость короткого цикла. И разговор с безопасностью тогда идёт не про исключения из правил, а про автоматизацию тех же самых правил, что уже приняты.</div>`}
+  ],
+  quiz:[
+    {q:'По какому признаку назначается уровень прав агента?',
+     a:['По зрелости команды','По обратимости действия и цене ошибки','По качеству выбранной модели'],
+     c:1,why:'Правка справки и изменение условий договора не могут иметь одинаковый уровень, каким бы хорошим ни был агент. Права привязаны к последствиям.'},
+    {q:'Чем опасно избыточное число подтверждений?',
+     a:['Замедляет работу команды и раздражает людей лишними действиями','Люди начинают подтверждать не читая, и в аудиторском следе появляются бессмысленные подписи','Растут расходы на модель, потому что каждое подтверждение стоит денег'],
+     c:1,why:'Формальный контроль хуже отсутствующего: он создаёт ложную уверенность и портит доказательную базу.'},
+    {q:'Что означает «требования как исполняемые правила»?',
+     a:['Требования пишутся на английском языке, чтобы агент лучше их понимал','Ограничение проверяется автоматически в процессе, а не согласуется человеком в конце','Требования согласует отдельный комитет, собирающийся раз в две недели'],
+     c:1,why:'Для регулируемой отрасли это единственный работающий путь: то, что не проверяется автоматически при коротком цикле, фактически не соблюдается.'},
+    {q:'С чем идти к службе безопасности?',
+     a:['С просьбой сделать исключение из действующих правил','С предложением автоматизировать уже принятые требования','С готовым решением, согласованным у генерального'],
+     c:1,why:'Если ПСИ, откат, маскирование и журнал аудита уже есть, вы не меняете принципы — вы переводите их на скорость короткого цикла.'}
+  ]
+},
+{
+  n:'07', min:'8', title:'Что будет с людьми',
+  kick:'Кого нанимать, кого растить и правда ли можно сократить штат',
+  short:'команда и роли',
+  steps:[
+    {h:'Главный вопрос владельца',html:`
+<p>Спрашивают обычно так: если агент пишет код, можно ли сократить разработчиков? Ответ короткий — можно, но не в том порядке, в каком хочется.</p>
+<p>Известная модель компактных команд — tiny teams на базе <abbr data-t="idp">IDP</abbr> — четверо-шестеро с агентами вместо двух десятков разработчиков — существует и работает. Но компактность там следствие выстроенного окружения: модульного кода, автоматических проверок, встроенного контроля. Если сократить команду до того, как это появилось, вы получите не эффективную маленькую команду, а обычную недоукомплектованную, которая теперь ещё и не успевает проверять то, что генерирует агент.</p>
+<div class="note warn"><span class="lbl">Порядок действий имеет значение</span>Сначала окружение, потом изменение размера команды. В обратную сторону это не работает ни разу: подготовка окружения — это работа, и делать её некому, если людей уже сократили.</div>`},
+    {h:'Какая работа исчезает и какая появляется',html:`
+<p>Полезнее думать не о количестве людей, а о том, чем они заняты. Общий сдвиг описывают как переход <strong>от исполнителя к <abbr data-t="orch">оркестратору</abbr></strong>: инженер перестаёт быть основным исполнителем кода и становится постановщиком задач, проектировщиком систем и проверяющим результат.</p>
+<table>
+<tr><th>Становится меньше</th><th>Становится больше</th></tr>
+<tr><td>Написание типового кода</td><td>Вычитка требований на противоречия</td></tr>
+<tr><td>Ручная сборка тестовых данных</td><td>Проектирование автоматических проверок качества</td></tr>
+<tr><td>Ревью диффов построчно</td><td>Проверка предложенного плана до исполнения</td></tr>
+<tr><td>Написание документации постфактум</td><td>Наблюдение за агентами в проде и разбор деградации</td></tr>
+</table>
+<p>Вся правая колонка требует более высокой квалификации, а не более низкой. Это и есть ответ на вопрос, почему сокращение не происходит автоматически: работа не исчезает, она смещается вверх по сложности.</p>
+<div class="note"><span class="lbl">Что показывают замеры</span>Инженеры фиксируют не сокращение рабочего времени, а рост объёма выпуска: по данным Anthropic за 2025 год — около +50% к производительности в самооценке и +67% слитых pull request на инженера в день. Здесь важна оговорка: первая цифра получена опросом, а самооценка в этой области ненадёжна (см. модуль 04). Время на отдельную задачу меняется незначительно, но число выпущенных фич, исправленных дефектов и проверенных гипотез растёт заметно. Оркестратор ведёт десятки задач параллельно вместо одной-двух.</div>`},
+
+{h:'Как меняется каждая роль',html:`
+<p>Ни одна роль не исчезает целиком. Меняется то, чем человек занят в течение дня — и вот как это выглядит по каждой.</p>
+<table>
+<tr><th>Роль</th><th>Чем занималась</th><th>Чем занимается теперь</th></tr>
+<tr><td><strong>Разработчик</strong></td><td>Пишет код по задаче</td><td>Ставит задачу агенту, проверяет план до исполнения, отвечает за результат. Ведёт несколько потоков параллельно</td></tr>
+<tr><td><strong>Аналитик</strong></td><td>Пишет документ с требованиями</td><td>Ведёт спецификацию как исполняемый артефакт: из неё порождаются код и тесты, изменения вносятся в неё, а не в код</td></tr>
+<tr><td><strong>Тестировщик</strong></td><td>Пишет и прогоняет сценарии, собирает данные</td><td>Проектирует автопроверки и эталонный набор, задаёт пороги, которые блокируют продвижение</td></tr>
+<tr><td><strong>Архитектор</strong></td><td>Проектирует систему и следит за соответствием</td><td>Тем же плюс границы модулей под объём контекста агента и правила среды исполнения</td></tr>
+<tr><td><strong>DevOps / SRE</strong></td><td>Пайплайны, инфраструктура, дежурства</td><td>Тем же плюс среда работы агентов и наблюдение за их поведением в проде</td></tr>
+<tr><td><strong>Тимлид</strong></td><td>Распределяет задачи, растит людей</td><td>Тем же плюс настройка уровней прав, порогов проверок и числа подтверждений</td></tr>
+<tr><td><strong>Продакт</strong></td><td>Пишет тикеты и приоритизирует</td><td>Формулирует гипотезу результата и участвует в разборе требований вместе с командой на входе</td></tr>
+<tr><td><strong>Безопасность</strong></td><td>Согласует перед выпуском</td><td>Оформляет требования как автоматические проверки, которые срабатывают в процессе</td></tr>
+<tr><td><strong>Дизайнер</strong></td><td>Проектирует интерфейс для человека</td><td>Тем же плюс участие в проектировании того, что видит и получает агент — это называют <abbr data-t="ax">Agent Experience</abbr></td></tr>
+</table>
+<div class="note field"><span class="lbl">Честная оговорка</span>Переход в режим оркестратора требует других личных качеств: терпимости к прерываниям, структурного мышления, готовности постоянно проверять чужие решения. Не каждый сильный инженер захочет так работать, и это законный карьерный выбор, а не дефект. Планируя переход, закладывайте, что часть людей останется в глубокой инженерии — и это нормально, такие люди тоже нужны.</div>`},
+
+{h:'Новые роли и когда их заводить',html:`
+<p>При масштабе появляются позиции, которых раньше не было. Важная оговорка: заводить их <strong>до</strong> появления объёма работы вредно — получите бюрократию вместо пользы. Сначала закрепите за существующими людьми три сквозные обязанности: разбор требований на входе, качество проверок, среда исполнения. Отдельные роли выделяются, когда одна из них перестаёт помещаться в чью-то основную работу.</p>
+<table>
+<tr><th>Роль</th><th>За что отвечает</th><th>Когда появляется</th></tr>
+<tr><td><strong>Product Engineer</strong></td><td>Сквозная поставка от исследования до прода и проверки результата. Собран из продакта, зрелого инженера и техлида</td><td>Первой — это основной новый профиль</td></tr>
+<tr><td><strong>AI Orchestrator</strong></td><td>Поток задач между постановкой и реализацией, переиспользование удачных паттернов</td><td>Когда параллельных агентных сессий больше, чем удерживает один человек</td></tr>
+<tr><td><strong>Guardian Agent Engineer</strong></td><td>Система автопроверок, агент-ревьюер, политики эскалации</td><td>Когда ручная проверка перестаёт справляться по объёму</td></tr>
+<tr><td><strong>Harness Platform Engineer</strong></td><td>Среда исполнения: инструменты, подключения, долгие процессы</td><td>Когда каждая команда начинает изобретать своё окружение</td></tr>
+<tr><td><strong>Context Supply Chain Owner</strong></td><td>Реестр спецификаций, библиотека паттернов, накопленные заметки</td><td>Когда контекст перестаёт помещаться в голову одной команды</td></tr>
+<tr><td><strong>AgentOps Engineer</strong></td><td>Наблюдение за агентами в проде, обнаружение деградации, вывод из эксплуатации</td><td>Когда агенты работают в проде постоянно</td></tr>
+<tr><td><strong>AI Security Officer</strong></td><td>Моделирование угроз агентных систем, защита от обхода ограничений</td><td>В регулируемых отраслях — рано, в остальных — по мере роста автономии</td></tr>
+</table>
+<p>Первые четыре забирают основную долю нового объёма работы и материализуются раньше остальных. Остальные либо сохраняют привычный профиль, либо производны от этих четырёх.</p>
+<div class="note warn"><span class="lbl">Частая ошибка</span>Нарисовать всю эту таблицу в оргструктуре на старте и начать нанимать под названия должностей. На практике роли вырастают из работы: сначала кто-то в команде фактически начинает заниматься проверками или средой, потом это закрепляется как зона ответственности, и только потом — как позиция в штатном расписании.</div>`},
+
+{h:'Что делать сотруднику, если руководство решило переходить',html:`
+<p>Допустим, решение уже принято, и вы узнали о нём на общей встрече. Дальше обычно возникают два вопроса: что теперь будет с моей работой и что делать прямо сейчас. Второй полезнее.</p>
+<p><strong>Чему учиться прямо сейчас.</strong> Три навыка дорожают быстрее остальных, и ни один не требует разрешения руководителя.</p>
+<ul>
+<li><strong>Писать спецификацию, из которой нельзя понять двояко.</strong> Возьмите последнюю свою задачу и опишите её по структуре из предыдущего шага. Отдайте коллеге и попросите найти, где можно понять иначе. Это самый быстрый способ прокачаться</li>
+<li><strong>Вычитывать чужой замысел, а не чужой код.</strong> Навык ловить противоречие в требованиях ценится выше, чем скорость набора, и растёт в цене дальше</li>
+<li><strong>Придумывать проверки.</strong> Не «как это работает», а «при каких условиях это сломается». Тесты пишет агент, но какие случаи важны — решает человек</li>
+</ul>
+<p><strong>Как договориться попробовать.</strong> Просить «давайте внедрим методологию» бесполезно. Работает узкая просьба: возьмите одну свою задачу, пройдите её через разбор требований с агентом и запишите, что выяснилось на входе такого, что раньше всплывало бы на третьей неделе. С этим уже можно идти к руководителю — вы приносите не идею, а результат.</p>
+<div class="note field"><span class="lbl">Что сказать руководителю</span>«Я попробовал на задаче Х. Разбор требований с агентом занял час, и вылезли три противоречия, которые мы обычно ловим на тестировании. Предлагаю попробовать так же на следующей задаче и посмотреть, повторится ли. Ресурсов дополнительно не нужно.» Такую просьбу трудно отклонить: она маленькая, измеримая и ничего не стоит.</div>
+<p>И про страх сокращения честно: работа смещается вверх по сложности, а не исчезает. Ценность теряет тот, кто умел только быстро писать типовой код по готовой постановке. Ценность растёт у того, кто понимает предметную область и умеет задать правильный вопрос к требованию.</p>`},
+
+{h:'Что делать с людьми, которые не хотят',html:`
+<p>Сопротивление будет, и оно не всегда иррационально. Разработчик, который двадцать лет наращивал мастерство в написании кода, теряет часть того, за что его ценили, — реагировать на это спокойно тяжело.</p>
+<p>Три вещи, которые снижают напряжение сильнее любых презентаций.</p>
+<ul>
+<li><strong>Честно назвать, что меняется.</strong> Попытка подать это как «просто новый удобный инструмент» не проходит — люди видят, что меняется суть работы, и перестают верить остальному сказанному</li>
+<li><strong>Показать, что растёт в цене.</strong> Понимание домена, умение задать правильный вопрос к требованию, чувство архитектуры — всё это дорожает, и у опытных людей этого больше, чем у кого-либо</li>
+<li><strong>Не делать раннее внедрение обязательным для всех.</strong> Первая команда должна быть добровольной. Результат первой команды убеждает лучше, чем распоряжение</li>
+</ul>
+<div class="note field"><span class="lbl">Что стоит зафиксировать сразу</span>Если вы не собираетесь сокращать людей по итогам первого этапа, скажите это прямо и в начале. Иначе команда будет саботировать не методологию, а собственное увольнение, и вы получите честный, но бесполезный результат пилота.</div>`}
+  ],
+  quiz:[
+    {q:'Правда ли, что маленькая команда с агентами заменяет большую?',
+     a:['Да, и начинать переход разумнее всего именно с сокращения штата','Да, но компактность — следствие выстроенного окружения, а не способ его получить','Нет, размер команды при таком переходе не меняется вообще никогда'],
+     c:1,why:'Сокращение до появления модульности, автопроверок и встроенного контроля даёт недоукомплектованную команду, которая ещё и не успевает проверять результат агента.'},
+    {q:'Что происходит с квалификацией требуемых сотрудников?',
+     a:['Снижается: агент берёт на себя всё сложное, а людям остаётся простая проверка результата','Растёт: работа смещается к вычитке требований, проектированию проверок и оценке планов','Требования к квалификации остаются примерно такими же, какими были до появления агентов'],
+     c:1,why:'Уходит написание типового кода и ручная сборка данных, приходит работа с намерением и качеством. Это ответ, почему сокращение не происходит само собой.'},
+    {q:'В чём проблема с начинающими разработчиками?',
+     a:['Начинающие хуже работают с агентами, медленнее осваивают инструменты и чаще ошибаются','Типовые задачи, на которых они набирали опыт, уходят к агенту, и воспроизводство кадров ломается','Начинающих нельзя допускать к спецификациям, пока они не научились уверенно писать код'],
+     c:1,why:'Работающее решение — раньше переводить их на работу с требованиями и проверками, то есть учить думать о намерении до того, как научили быстро писать код.'},
+    {q:'Когда заводить новые роли — Product Engineer, Guardian Agent Engineer и остальные?',
+     a:['Сразу: нарисовать в оргструктуре и нанимать под названия должностей','Когда объём работы перестаёт помещаться в чью-то основную занятость','Никогда: хватает существующих ролей'],
+     c:1,why:'Преждевременная специализация даёт бюрократию вместо пользы. Сначала за существующими людьми закрепляются три обязанности — разбор требований на входе, качество проверок, среда исполнения, — и роль выделяется, когда одна из них перерастает основную работу.'},
+    {q:'Что происходит с ролью инженера в целом?',
+     a:['Он становится оператором инструмента, теряет влияние на результат и глубину экспертизы','Он переходит от исполнителя к оркестратору: ставит задачи агентам, проверяет планы, ведёт десятки задач параллельно','Его роль принципиально не меняется, добавляется только новый инструмент'],
+     c:1,why:'Замеры показывают не сокращение рабочего времени, а рост объёма выпуска. Профиль работы меняется: меньше глубокой фокусировки на одной задаче, больше решений о качестве и приоритетах.'},
+    {q:'Как правильно запускать первую команду?',
+     a:['Распоряжением сверху сразу для всех подразделений, чтобы не было отговорок','Добровольно: результат первой команды убеждает лучше приказа','Силами внешнего подрядчика, который уже проходил такой переход'],
+     c:1,why:'Сопротивление здесь не иррационально — меняется суть работы. Обязаловка на старте превращает пилот в проверку лояльности вместо проверки гипотезы.'}
+  ]
+},
+{
+  n:'08', min:'5', title:'Как считать эффект',
+  kick:'Метрики, ложная атрибуция и почему цифру скорости нельзя показывать одну',
+  short:'деньги и метрики',
+  steps:[
+    {h:'Четыре группы показателей',html:`
+<p>Чтобы не собирать десяток цифр про одно и то же, метрики удобно держать в четырёх группах.</p>
+<table>
+<tr><th>Группа</th><th>На какой вопрос отвечает</th><th>Пример</th></tr>
+<tr><td>Результат</td><td>Что получил бизнес</td><td>Время от идеи до прода</td></tr>
+<tr><td>Качество</td><td>Какой ценой</td><td>Доля релизов с откатом и дефектами</td></tr>
+<tr><td>Доверие</td><td>Можно ли на это полагаться</td><td>Доля изменений, по которым можно восстановить, что и почему сделал агент</td></tr>
+<tr><td>Здоровье процесса</td><td>Не разъезжается ли всё</td><td>Стоимость единицы результата</td></tr>
+</table>
+<p>Базой служит <abbr data-t="dora">DORA</abbr> (DevOps Research and Assessment): частота деплоев, время до прода, доля неудачных изменений, время восстановления. Отдельно нужен человек, который ведёт <abbr data-t="adlc">ADLC</abbr>, жизненный цикл самого агента — следит за поведением в проде и замечает, что качество работы поехало, — эта роль в старой структуре не предусмотрена.</p>`},
+    {h:'Три способа обмануть самого себя',html:`
+<p><strong>Приписать эффект не той причине.</strong> Улучшение произошло, но не от того, что записано в отчёте. Самая частая и самая дорогая ошибка, потому что по ней принимается решение о деньгах.</p>
+<div class="note field"><span class="lbl">История из жизни</span>В крупной компании время тестирования сократилось на 30%. В отчёт это попало как эффект от ИИ-ассистентов — их внедряли в том же квартале, и связь выглядела очевидной. При разборе выяснилось другое: сработал отдельный инструмент, который через интеграции с соседними системами сам генерировал тестовые данные. До него тестировщики тратили основной ресурс на то, чтобы найти или собрать данные для регресса, и именно это время исчезло. ИИ к результату отношения не имел.<br><br>Неприятно не то, что в отчёте оказалась неверная строчка. Если бы по этой цифре принимали решение о масштабировании, деньги пошли бы в ассистентов вместо автоматизации тестовых данных — и эффект просто не повторился бы. Отсюда правило: одно заметное изменение за период. Если их два, вы измеряете календарь.</div>
+<p><strong>Превратить метрику в цель.</strong> Как только показатель становится целью, он перестаёт что-либо измерять. Доля принятых подсказок агента прекрасно растёт, если ослабить требовательность на ревью.</p>
+<p><strong>Верить опросам.</strong> Люди искренне завышают сэкономленное время. Считайте по системам.</p>`},
+    {h:'Держите метрики парами',html:`
+<p>Три пары, где второй показатель ограничивает первый. Этого достаточно, чтобы вовремя увидеть, что выигрыш покупается слишком дорого.</p>
+<ul>
+<li><strong>Скорость и качество.</strong> Время до прода против доли релизов с откатом и дефектами. Если растёт и то, и другое, вы не ускорились: сэкономленное время вернётся разборами инцидентов</li>
+<li><strong>Самостоятельность и прослеживаемость.</strong> Доля изменений, которые агент делает сам, против доли изменений, по которым сохранилось всё нужное для разбора: из какой спецификации выросло, какой план был утверждён, кем и что проверено, какие права были у агента. Если первая доля растёт быстрее второй — вы уже не сможете разобрать инцидент</li>
+<li><strong>Результат и стоимость.</strong> Сколько стоит единица достигнутого результата с учётом расходов на модель. Без этой пары рост самостоятельности агентов тихо съедает бюджет</li>
+</ul>
+<div class="note"><span class="lbl">Правило отчётности наверх</span>Не показывайте метрику скорости без парной метрики качества на том же слайде. Не из перестраховки: если качество поедет, разговор о причинах роста инцидентов всё равно состоится — но уже без вашего участия в формулировках.</div>`}
+  ],
+  quiz:[
+    {q:'Какая ошибка в измерениях обходится дороже всего?',
+     a:['Округление в отчёте','Приписать эффект не той причине','Слишком частый сбор данных'],
+     c:1,why:'По этой цифре принимается решение о масштабировании: деньги уйдут не в то, что дало результат, и эффект не повторится.'},
+    {q:'Как этого избежать?',
+     a:['Вводить одно заметное изменение за период','Чаще опрашивать команду','Отслеживать больше метрик сразу'],
+     c:0,why:'Если в квартале изменилось несколько вещей, вы измеряете календарь, а не причину. Либо разносите изменения, либо оставляйте контрольную группу.'},
+    {q:'Почему метрику скорости не показывают в одиночку?',
+     a:['Так принято в управленческой отчётности и требуют инвесторы','Рост скорости при росте доли откатов и дефектов означает долг, а не ускорение','Одну цифру руководство не поймёт без сравнения с другими показателями'],
+     c:1,why:'Пары ограничивают друг друга. Иначе разговор о росте инцидентов состоится позже и без вашего участия в формулировках.'},
+    {q:'Что показывает стоимость единицы результата?',
+     a:['Расходы на лицензии и подписки в расчёте на одного сотрудника','Во сколько обходится единица достигнутого результата с учётом расходов на модель','Затраты на обучение сотрудников новым инструментам и процессам'],
+     c:1,why:'Без этой метрики рост самостоятельности агентов тихо съедает бюджет: работы делается больше, но каждая единица результата дорожает.'}
+  ]
+},
+{
+  n:'09', min:'6', title:'С чего начать',
+  kick:'Семь шагов первого квартала: что делать, кто отвечает, чем закончится',
+  short:'последовательность шагов',
+  steps:[
+    {h:'Что нужно подготовить заранее',html:`
+<p>Обычно на этом месте спрашивают: зачем что-то готовить заранее? Начну со спецификации, а тесты и документацию агент напишет сам.</p>
+<p>Так и есть. Напишет. И заложить тесты в спецификацию с самого начала проще, чем потом дописывать их к готовому коду.</p>
+<p>Но несколько вещей агент за вас не сделает. Он не создаст место, где эти тесты будут запускаться сами при каждом изменении. Не договорится с вашими людьми о том, что неудачный тест останавливает выпуск. Не научит вашу систему откатываться назад за пять минут. И не вспомнит, во сколько обходилась работа до того, как вы всё поменяли.</p>
+<p>Поэтому четыре вопроса ниже — не экзамен на допуск. Начать можно почти из любой точки. Они нужны, чтобы <strong>заранее понимать, что придётся доделать руками</strong>, и снять цифры, пока есть с чем сравнивать.</p>
+<table>
+<tr><th>Вопрос</th><th>Закроет ли агент</th><th>Что придётся делать людям</th></tr>
+<tr><td><strong>Может ли проверка не пропустить релиз?</strong><br><span style="color:var(--ink-45);font-size:14px">Проверка: когда автотесты последний раз остановили выкатку? «Никогда» или «отключаем, когда горит срок» = нет</span></td><td><strong>Да, частично.</strong> Тесты напишет и покроет ими спецификацию</td><td>Место, где они прогоняются автоматически, и договорённость, что красный прогон блокирует выпуск. Текст в спецификации ничего не блокирует</td></tr>
+<tr><td><strong>Сможете ли через месяц объяснить, почему система работает именно так?</strong><br><span style="color:var(--ink-45);font-size:14px">Проверка: возьмите изменение прошлой недели и за 10 минут ответьте, зачем его сделали и кто одобрил</span></td><td><strong>Да.</strong> Спецификация и есть ответ на «зачем», и она остаётся в истории</td><td>Связать спецификацию, утверждение и выпуск так, чтобы это поднималось по одному запросу. Иначе через месяц вы будете искать по переписке</td></tr>
+<tr><td><strong>Умеете ли быстро вернуть систему назад после неудачного релиза?</strong><br><span style="color:var(--ink-45);font-size:14px">Проверка: когда откат последний раз выполняли или репетировали? Больше 3 месяцев назад = нет</span></td><td><strong>Нет.</strong> Это свойство того, как устроена выкатка</td><td>Собственно возможность отката и её регулярная проверка. Выпусков станет больше — значит, и поводов вернуться назад</td></tr>
+<tr><td><strong>Знаете, во сколько обходится задача от постановки до прода?</strong><br><span style="color:var(--ink-45);font-size:14px">Проверка: назовите цифру для типовой задачи прошлого месяца — в деньгах или человеко-днях</span></td><td><strong>Нет.</strong> И задним числом не восстановить</td><td>Снять цифру до начала. Через квартал вы будете доказывать эффект, и сравнивать окажется не с чем</td></tr>
+</table>
+<p>Обратите внимание на правую колонку: там нет ни слова про модели и промпты. Всё это — либо техника, которую надо один раз настроить, либо договорённости между людьми. Ни то, ни другое из спецификации не появится.</p>
+<p>Если правая колонка у вас пустая по всем четырём строкам — начинайте всё равно. Просто знайте заранее, что упрётесь именно сюда, и первый же проход это покажет.</p>
+<div class="note field"><span class="lbl">Подготовку тоже можно делать агентом</span>Ту самую работу из правой колонки удобно поручить агенту — Claude Code, Cursor или тому, что у вас используется. Он развернёт запуск тестов при каждом изменении, напишет недостающие проверки на существующий код, соберёт скрипт отката, поднимет сбор метрик из ваших систем. Это сильно короче, чем делать руками: недели превращаются в дни.<br><br>Но полностью эти шаги агент не отменяет, и вот где заканчиваются его возможности. <strong>Решить, что красный тест останавливает выпуск, может только человек</strong> — это договорённость с командой и с бизнесом, а не настройка. <strong>Проверить, что откат действительно работает</strong>, придётся на живой системе, и брать на себя этот риск тоже человеку. <strong>Понять, осмысленны ли написанные тесты</strong>, агент за вас не сможет: он проверит то, что вы описали, включая ошибки в описании. И <strong>цифру «до»</strong> он не восстановит, если её никто не снял.<br><br>Практическое правило: агентом делайте то, что делается один раз и проверяется автоматически. Всё, что требует чьего-то согласия или принятия риска, остаётся людям.</div>
+<div class="note warn"><span class="lbl">Чего не делать на этом этапе</span>Не перерисовывайте роли и оргструктуру. Не покупайте подписки на всю компанию. Не объявляйте программу трансформации. Всё это делается по итогам первого прохода, а не до него — иначе вы принимаете решения, не имея ни одной собственной цифры.</div>`},
+
+{h:'Семь шагов первого квартала',html:`
+<ol class="seq">
+<li><span class="sm">Неделя 1 · вы</span><span class="st">Выбрать команду</span>
+Одну. Добровольно, а не распоряжением: сопротивление здесь не иррационально, меняется суть работы. Лучше берите команду со средним, а не лучшим результатом — на сильной всё сработает и ничего не покажет.
+<div class="sq">Спросите себя: если эта команда скажет «не получилось», я готов принять такой ответ?</div></li>
+
+<li><span class="sm">Неделя 1 · вы и тимлид</span><span class="st">Выбрать задачу</span>
+Настоящую, из бэклога. Среднего размера: с требованиями, тестами и прохождением через безопасность. Не в песочнице — на выдуманной задаче не вылезут те сложности, ради которых всё затевается, и вы ничему не научитесь.
+<div class="sq">Спросите себя: эта задача пройдёт через безопасность и релизное окно, как обычная?</div></li>
+
+<li><span class="sm">Неделя 1 · вы</span><span class="st">Снять базовые метрики</span>
+До начала: время от идеи до прода, доля релизов с откатом и дефектами, стоимость прохода задачи. Без базы через квартал сравнивать будет не с чем, и разговор об эффекте станет обменом впечатлениями.
+<div class="sq">Спросите себя: какие ещё изменения идут в этом периоде? Если есть — вы измеряете календарь.</div></li>
+
+<li><span class="sm">Недели 2–4 · команда</span><span class="st">Провести один полный проход</span>
+От постановки до мержа. Назначьте человека, который ведёт записи по ходу: где правили план агента, сколько ушло на проверку против исполнения, что выяснилось в требованиях на входе.
+<div class="sq">Спросите себя: команда знает, что мы проверяем гипотезу, а не её продуктивность?</div></li>
+
+<li><span class="sm">Конец месяца 1 · вы</span><span class="st">Собрать два документа</span>
+Список контролей, которые не сработали, и цену прохода. Это и есть результат первого месяца — не ускорение. Ускорения в первый месяц не будет, и обещать его наверх не надо.
+<div class="sq">Спросите себя: готов ли я показать этот список безопасности целиком, без правок?</div></li>
+
+<li><span class="sm">Месяц 2 · команда и безопасность</span><span class="st">Закрыть найденные дыры</span>
+По списку: автопроверки с порогами, след действий, комплект доказательств на каждый кусок работы, уровни прав по обратимости. Здесь же предметный разговор с безопасностью — с предложением автоматизировать уже принятые требования.
+<div class="sq">Спросите себя: сколько подтверждений в день получается? Больше десятка — их начнут давать не читая.</div></li>
+
+<li><span class="sm">Месяц 3 · вы</span><span class="st">Проверить переносимость</span>
+Ещё две команды: одна на новом проекте, одна на легаси. Цель не скорость, а понимание, что переносится, а что упирается в специфику. Метрики парные с первого дня.
+<div class="sq">Спросите себя: результат воспроизвёлся на легаси или держался на удачном выборе первой задачи?</div></li>
+</ol>`},
+    {h:'Чем закончится квартал и что сказать наверх',html:`
+${FIG.plan}
+<p>На выходе у вас четыре вещи, и ни одна из них не является обещанием.</p>
+<ul>
+<li>Измеренный проход на реальной задаче: сколько заняло, где встало, сколько стоило</li>
+<li>Закрытый список дыр в контуре контроля, согласованный с безопасностью</li>
+<li>Понимание, воспроизводится ли результат на легаси</li>
+<li>Стоимость единицы результата — цифра, по которой считается масштабирование</li>
+</ul>
+<p>Только теперь принимается решение: разворачивать, продолжать точечно или остановиться. Все три исхода допустимы, и третий тоже результат — вы потратили один квартал и одну команду вместо годовой программы.</p>
+<div class="note field"><span class="lbl">Три вопроса своему техническому директору</span>Если вы владелец и хотите проверить, что происходит на самом деле, спросите три вещи.<br><br><strong>1. «Покажи цифру до и цифру после по одной конкретной задаче».</strong> Хороший ответ — две цифры и оговорка, что́ ещё менялось в этом периоде. Плохой ответ — «команда говорит, стало быстрее».<br><br><strong>2. «Что у нас сломалось за это время и как мы об этом узнали?».</strong> Хороший ответ — называет случай и говорит, поймала его автоматика или клиент. Плохой — «всё нормально».<br><br><strong>3. «Сколько мы платим за модели в месяц и на что это делится?».</strong> Хороший ответ — цифра и понимание, какая часть на что уходит. Плохой — «немного» или «надо посмотреть».<br><br>Вам не нужно разбираться в технике, чтобы оценить эти ответы. Достаточно услышать, есть за ними цифры или нет.</div>
+<div class="note field"><span class="lbl">Формулировка для совета директоров</span>Не «внедряем ИИ в разработку» — на этой формулировке разговор уйдёт в обсуждение хайпа и закончится ничем. Работает другая: за квартал мы получаем измеренный проход на реальной задаче, список дыр в контроле и стоимость единицы результата, и уже после этого принимаем решение о масштабировании. Вы просите не поверить, а дать один квартал и одну команду под понятный результат.</div>
+<div class="note warn"><span class="lbl">Шесть способов потратить квартал впустую</span>Поставить ИИ поверх неизменного процесса · сделать пилот на учебной задаче · завалить команду подтверждениями и получить approval fatigue · вложить бюджет в подписки вместо подготовки окружения · отчитываться одной метрикой скорости · перерисовать роли до первой реальной задачи.</div>`}
+  ],
+  quiz:[
+    {q:'«Тесты агент напишет сам, значит, автотесты не нужны заранее». В чём здесь ошибка?',
+     a:['Агент не умеет писать осмысленные тесты, это по-прежнему работа человека','Тесты он напишет, но им нужно место для автоматического прогона и правило, что красный прогон блокирует выпуск','Ошибки нет: готовность инфраструктуры при таком подходе вообще не важна'],
+     c:1,why:'Спецификация не блокирует релиз. Блокирует инфраструктура и договорённость между людьми — этого агент за вас не создаст.'},
+    {q:'Что из подготовки разумно поручить агенту вроде Claude Code, а что нет?',
+     a:['Всё: агент закроет подготовку целиком','Настройку и написание проверок — да; решения, требующие согласия людей или принятия риска, — нет','Ничего: подготовку делают только руками'],
+     c:1,why:'Агент развернёт запуск тестов, напишет недостающие проверки, соберёт скрипт отката — это недели вместо месяцев. Но договорённость «красный тест останавливает выпуск», проверка отката на живой системе и оценка осмысленности тестов остаются за людьми.'},
+    {q:'Зачем снимать стоимость прохода задачи до начала?',
+     a:['Этого прямо требует методология и без этого шага она не работает','Задним числом её не восстановить, а через квартал придётся доказывать эффект','Чтобы обосновать закупку подписок и оборудования перед финансовым блоком'],
+     c:1,why:'Из четырёх вопросов самодиагностики этот единственный, который нельзя отложить: точка отсчёта существует только сейчас.'},
+    {q:'Какую команду выбрать для первого прохода?',
+     a:['Самую сильную команду: на ней точно получится и результат будет убедительным','Среднюю и добровольно: на сильной всё сработает и ничего не покажет','Определить команду распоряжением сверху, чтобы не было отговорок и торга'],
+     c:1,why:'Задача первого прохода — найти дыры, а не получить красивый результат. Сильная команда закроет их собой, и вы узнаете о проблемах при масштабировании.'},
+    {q:'Что обязательно снять до начала?',
+     a:['Базовые метрики: время до прода, долю откатов, стоимость прохода','Письменное согласие всех смежных подразделений на изменение процесса','План коммуникации для сотрудников и ответы на их возможные вопросы'],
+     c:0,why:'Без базы сравнивать через квартал будет не с чем. И проверьте, что в периоде не идёт других заметных изменений, иначе вы измеряете календарь, а не причину.'},
+    {q:'Какой результат первого месяца считается успешным?',
+     a:['Команда стала заметно быстрее закрывать задачи из своего бэклога','Собраны два документа: список несработавших контролей и цена прохода','Методология развёрнута на все команды подразделения и работает у всех'],
+     c:1,why:'Ускорения в первый месяц не будет, и обещать его наверх не надо. Месяц покупает знание о том, где у вас дыры, — из него складывается работа второго месяца.'}
+  ]
+}
+];
+
+const FAQ = [
+ {q:'Это не очередной хайп, который через год забудут?',
+  a:'Отчасти хайп, отчасти нет, и разделить их можно по простому признаку. Обещания вроде «разработка подешевеет в десять раз» — хайп. А вот сдвиг узкого места с написания кода на проверку намерения никуда не денется, потому что он вызван не модой, а тем, что генерация действительно стала дешёвой. Даже если конкретные названия методологий сменятся, работа по наведению порядка в коде, автопроверкам и следу действий останется полезной при любом сценарии — это и есть разумная страховка.'},
+ {q:'Кто отвечает, если агент сломает прод?',
+  a:'Ровно тот же, кто отвечал раньше: команда и её руководитель. Ответственность не переносится на инструмент, как она не переносится на компилятор или на фреймворк. Практическая сторона вопроса другая — она про то, чтобы у вас был след действий агента, протестированный откат и понятные уровни прав. Тогда разбор инцидента ничем не отличается от обычного: видно, что было предложено, кто утвердил и на каком шаге проверка не сработала.'},
+ {q:'Наш код и данные уйдут наружу?',
+  a:'Это вопрос выбора модели и контура, а не методологии. Сама методология агностична: она описывает процесс и одинаково работает с моделью в публичном облаке, в изолированном контуре или развёрнутой локально. Что действительно требует внимания — какие данные попадают в контекст агента и в логи. Персональные данные утекают чаще не через саму модель, а через отладочные логи и тестовые выборки, и это надо закрывать независимо от того, внедряете вы что-то новое или нет.'},
+ {q:'Сколько это стоит?',
+  a:'Расходы делятся на три части, и самая заметная из них не самая большая. Первая — плата за использование моделей, её порядок вы узнаете уже на первой реальной задаче, и именно поэтому цену прохода нужно измерить сразу. Вторая — работа по подготовке окружения: автотесты, границы модулей, автоматические проверки. Третья — время людей на переучивание. Вторая часть обычно оказывается крупнее первой в несколько раз, и её же чаще всего забывают заложить в бюджет.'},
+ {q:'Нам придётся сокращать разработчиков?',
+  a:'Не в первый год и не автоматически. Работа не исчезает, она смещается вверх по сложности: меньше написания типового кода, больше вычитки требований, проектирования проверок и оценки планов. Компактные команды из четырёх-шести человек существуют, но появляются они после того, как выстроено окружение, а не до. Если сократить людей раньше, некому будет делать ту самую работу по подготовке, ради которой всё затевалось.'},
+ {q:'Сколько это стоит в деньгах? Хотя бы порядок',
+  a:'Расходы делятся на три части. Первая — плата за использование моделей. Порядок для команды из десяти человек, работающей ежедневно, — обычно сотни долларов в месяц, а не десятки тысяч; точную цифру вы узнаете на первой же реальной задаче, поэтому её и надо измерить в первую очередь. Вторая часть — подготовка: автопроверки, наведение порядка в коде, настройка среды. Она обычно в несколько раз крупнее первой и измеряется человеко-месяцами, а не подписками. Третья — время людей на переучивание, примерно квартал сниженной производительности у тех, кто переходит первым. Самая частая ошибка бюджета — заложить только первую часть.'},
+ {q:'У меня нет своей разработки, всё на подрядчике. Это ко мне вообще относится?',
+  a:'Относится, но по-другому. Вы не внедряете методологию сами — вы меняете то, что покупаете и как проверяете. Практически: попросите подрядчика показать спецификации, из которых порождается работа, а не только результат; включите в договор передачу автопроверок вместе с кодом; спросите, как у них устроен откат и есть ли след действий агента. Если подрядчик уже работает с агентами, скорость для вас вырастет — но риск, что вам сдадут непроверенный сгенерированный код, вырастет тоже. Приёмка становится важнее, чем была.'},
+ {q:'Кому принадлежит код, который написал агент?',
+  a:'Это вопрос к вашим юристам, а не ко мне, и он зависит от юрисдикции и от условий конкретного поставщика модели. Что стоит проверить до начала: условия использования выбранного сервиса — что там сказано о правах на результат и об использовании ваших данных для обучения; договоры с сотрудниками и подрядчиками — покрывают ли они результат, созданный с помощью инструментов; обязательства перед вашими клиентами по конфиденциальности. Отдельный практический риск: агент может воспроизвести фрагмент кода под лицензией, несовместимой с вашей. Проверка лицензий зависимостей и происхождения кода — такая же автоматическая проверка в конвейере, как и остальные.'},
+ {q:'Мы не можем поставить текущие проекты на паузу. Как это совместить?',
+  a:'Ставить на паузу и не нужно. Первый месяц — это одна команда и одна задача из обычного бэклога, то есть работа, которую вы всё равно собирались делать. Дополнительных ресурсов не требуется, требуется согласие на то, что эта конкретная задача пойдёт медленнее обычного: разбор требований на входе и записи по ходу занимают время. Закладывайте, что первая задача выйдет дольше типовой примерно в полтора раза. Это плата за то, чтобы узнать, где у вас дыры, на одной задаче, а не на всём портфеле.'},
+ {q:'Что будет с качеством кода?',
+  a:'Зависит только от того, что вы сделаете с проверками. Данные показывают: генерация ускоряет написание примерно на треть и при неизменном ревью добавляет около четверти уязвимостей. То есть само по себе качество падает. Оно перестаёт падать, когда проверки становятся автоматическими и блокирующими: регресс, анализ безопасности, оценка на эталонном наборе сценариев (golden dataset). Это и есть основная работа второго месяца в плане внедрения.'},
+ {q:'У нас легаси, которому пятнадцать лет. Это вообще применимо?',
+  a:'Применимо, но медленнее и с другим первым шагом. Агенту тяжело работать с кодом без внятных границ: чем больше приходится втягивать в контекст, тем ниже качество плана и выше стоимость. Поэтому на легаси первые задачи берут в наиболее изолированных участках, а параллельно занимаются нарезкой на модули — работой, которая и без ИИ была нужна, просто теперь у неё появилось измеримое обоснование. Ожидать пятикратного ускорения на монолите в первый квартал не стоит.'},
+ {q:'Через сколько будет виден результат?',
+  a:'Первый измеримый результат — через месяц, и это не ускорение. Это список контролей, которые не сработали, и цена прохода одной задачи. Ускорение на уровне отдельных команд обычно проявляется на втором-третьем месяце, а на уровне сроков выхода продуктов — не раньше полугода, потому что до этого выигрыш упирается в неизменённые релизные окна и согласования.'},
+ {q:'Нужно ли менять оргструктуру?',
+  a:'Не сразу и не по презентации. Структуру осмысленно менять по итогам практики: сначала три команды проходят реальные задачи, потом становится видно, какие роли действительно изменились и где появились новые обязанности — например, кто-то должен следить за поведением агентов в проде. Перерисовка ролей до первого прохода — один из самых распространённых способов потратить квартал впустую.'},
+ {q:'А если вендор или модель станут недоступны?',
+  a:'Это ровно тот случай, где вложения в окружение окупаются. Методология не привязана к конкретной модели или инструменту: правила процесса, спецификации, автопроверки и след действий остаются вашими. Смена модели превращается в замену компонента с перепрогоном проверок. Именно поэтому не стоит строить процесс вокруг уникальных возможностей одного поставщика — и стоит держать набор эталонных сценариев, на которых новую модель можно быстро сравнить со старой.'},
+ {q:'Чем это отличается от того, чтобы просто купить всем Copilot?',
+  a:'Тем же, чем покупка станков отличается от перестройки цеха. Ассистент в редакторе ускоряет одну операцию, которая занимает около четверти цикла, — арифметически это даёт 12–15% и теряется в разбросе сроков. Методология меняет порядок работ: требования разбираются с агентом на входе, проверки становятся автоматическими и распределёнными, согласование получает готовый комплект документов. Данные это подтверждают: у компаний с десятью и более сценариями применения ускорение видят 66%, у компаний с пятью и меньше — 35%.'},
+ {q:'Зачем оценивать готовность, если можно просто начать со спецификации, а тесты агент напишет сам?',
+  a:'Так и есть — начать можно почти из любой точки, и тесты агент действительно напишет. Вопросы готовности нужны не для решения «начинать или нет», а чтобы заранее понимать, что придётся доделать руками. Два пункта из четырёх спецификацией не закрываются в принципе: возможность быстро вернуть систему назад — это свойство того, как устроена выкатка, а не текст в документе; и базовая стоимость прохода задачи, которую нельзя восстановить задним числом. Плюс написанные агентом тесты ничего не блокируют сами по себе — нужно место, где они прогоняются автоматически, и договорённость, что красный прогон останавливает выпуск. При этом саму подготовку тоже разумно делать агентом: развернуть запуск тестов, дописать проверки на существующий код, собрать скрипт отката, поднять сбор метрик — это дни вместо недель. Агент не заменяет только то, что требует чьего-то согласия или принятия риска: решение остановить выпуск по красному тесту, проверку отката на живой системе и оценку того, осмысленны ли написанные проверки.'},
+ {q:'Не рано ли этим заниматься? Всё меняется каждый месяц',
+  a:'Методологии, о которых речь, появились в 2025–2026 годах, отраслевого стандарта пока нет, и через год многое будет выглядеть иначе. Это правда. Но обратите внимание, что именно устаревает: названия методологий, конкретные инструменты, формулировки шагов. А то, что вы делаете по ходу — автопроверки, порядок в коде, прослеживаемость изменений, быстрый откат, измеренная стоимость работы — полезно при любом развитии событий и не пропадёт, даже если через год всё будет называться иначе. Поэтому разумная стратегия не «ждать стандарта», а вкладываться в то, что переживёт смену моды.'},
+ {q:'С чего начать лично мне как руководителю на этой неделе?',
+  a:'С четырёх вопросов из восьмого модуля — есть ли блокирующий автоматический регресс, есть ли пригодный для проверки след, проверялся ли откат, известна ли цена прохода задачи. Дальше выберите одну команду, добровольно, и одну настоящую задачу из бэклога. Через месяц у вас будет два документа: список контролей, которые не сработали, и стоимость прохода. С ними уже можно идти к совету директоров, а без них разговор неизбежно сведётся к обсуждению хайпа.'}
+];
+
+
+const SIG = `<div class="sig">
+  <span>Юрий Кононов · CTO</span>
+  <a href="https://t.me/ykononov" target="_blank" rel="noopener">@ykononov</a>
+  <span class="sp"></span>
+  <a href="https://ykononov.com/aipdlc" target="_blank" rel="noopener">ykononov.com</a>
+  <span>CC BY 4.0</span>
+</div>`;
+
+function renderGlossary(){
+  const items=Object.entries(TERMS).map(([k,t])=>`
+    <div class="gl-item">
+      <div class="ab">${t.ab}</div>
+      <div class="full">${t.full}</div>
+      <div class="dd">${t.d}</div>
+    </div>`).join('');
+  view.innerHTML=`
+  <p class="eyebrow">Справочник · можно открыть в любой момент</p>
+  <h2 class="mtitle" style="margin-bottom:14px">Термины</h2>
+  <p class="lede" style="font-size:17px;margin-bottom:26px">Двадцать шесть понятий, которые встречаются в курсе и в первоисточниках. В тексте они подчёркнуты пунктиром — определение открывается по клику.</p>
+  <div class="gl">${items}</div>
+  <div class="nav"><button class="btn primary" onclick="leaveAux()">← вернуться к курсу</button></div>`+SIG;
+  window.scrollTo(0,0); drawSpine();
+}
+function openGlossary(){ if(S.view!=='glossary'&&S.view!=='faq'){ S.auxFrom=S.view; } S.view='glossary'; renderGlossary(); }
+function leaveAux(){
+  const back=S.auxFrom||'intro';
+  S.view=back;
+  if(back==='module') renderModule();
+  else if(back==='done') renderDone();
+  else renderIntro();
+}
+
+
+/* варианты перемешиваются один раз при загрузке, чтобы правильный
+   не оказывался всегда на одной позиции */
+(function shuffleOptions(){
+  let seed = 20260818;
+  const rnd = () => (seed = (seed*1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+  COURSE.forEach(m => m.quiz.forEach(q => {
+    const right = q.a[q.c];
+    for (let i = q.a.length - 1; i > 0; i--) {
+      const j = Math.floor(rnd() * (i + 1));
+      [q.a[i], q.a[j]] = [q.a[j], q.a[i]];
+    }
+    q.c = q.a.indexOf(right);
+  }));
+})();
+
+const S = {
+  view:'intro', mod:0, step:0, onGate:false,
+  passed:COURSE.map(()=>false),
+  answers:COURSE.map(m=>m.quiz.map(()=>null)),
+  keepScroll:false,
+  faqOpen:new Set(),
+  faqFrom:null,
+  auxFrom:null
+};
+const unlocked = i => i===0 || S.passed[i-1];
+const view = document.getElementById('view');
+const spine = document.getElementById('spine');
+
+function drawSpine(){
+  spine.innerHTML='';
+  COURSE.forEach((m,i)=>{
+    const b=document.createElement('button');
+    b.className='node';
+    b.dataset.state = S.passed[i] ? 'passed' : (S.view==='module'&&S.mod===i ? 'open' : 'idle');
+    b.disabled=!unlocked(i);
+    b.title = unlocked(i) ? `${m.n} — ${m.title}` : `${m.n} — откроется после теста ${COURSE[i-1].n}`;
+    b.setAttribute('aria-label',b.title);
+    b.innerHTML=`<span class="dot">${S.passed[i]?'✓':m.n}</span>`;
+    b.onclick=()=>{ if(unlocked(i)) openMod(i); };
+    spine.appendChild(b);
+    if(i<COURSE.length-1){const l=document.createElement('span');l.className='link';spine.appendChild(l);}
+  });
+  document.getElementById('cnt').textContent = S.passed.filter(Boolean).length;
+}
+
+function renderIntro(){
+  view.innerHTML=`
+  <p class="eyebrow">Бесплатный курс · 9 модулей · 52 минуты</p>
+  <h1 class="thesis">AI-PDLC:<span class="dim">как меняется процесс создания продукта с использованием AI</span></h1>
+  <div class="herorow">
+  <p class="claim">Фокус смещается с написания кода на спецификацию и окружение</p>
+  <div class="byline">
+    <img class="ava" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAQDAwMDAgQDAwMEBAQFBgoGBgUFBgwICQcKDgwPDg4MDQ0PERYTDxAVEQ0NExoTFRcYGRkZDxIbHRsYHRYYGRj/2wBDAQQEBAYFBgsGBgsYEA0QGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBgYGBj/wAARCAEsASwDASIAAhEBAxEB/8QAHQABAAIDAQEBAQAAAAAAAAAAAAUGBAcIAwECCf/EAEMQAAIBAwIEBAQDBwMCBQMFAAECAwAEEQUhBhIxQQcTUWEUInGBCDKRI0KhscHR8BVSYuHxJDNDcoIWU5IJGDWiw//EABsBAQACAwEBAAAAAAAAAAAAAAADBAECBQYH/8QAKxEAAgICAgEDBAICAwEAAAAAAAECAxEhBBIxBRNBFCJRYTJxofAzgZHB/9oADAMBAAIRAxEAPwDuilKVsRilKUApSlAKUpQClKUApSse/v7LS9LutS1K7htbO1iae4uJmCpFGoyzsT0AAJJoDIrW3iB4+eEfhhqP+m8ZcZ2lpqHlmX4GBHuJgucbrGDynPQMQTg+lcyfiZ/GXPpeqxcKeCfE9o6xow1HXbaBZ1LnYRW7tldhklwDuQAdjXDY1N7yeWe5uFmmlYySSzNl5GJyzMSMkkkkk71HObXhE1dSl5Z3Jxf/APqH2K3cltwFwMZYghC3eszEHmzsfKjOMY7F85rR3Gv4vfGDjSNrd+M30K0Zy3w2jxLbADGOUupLsPYtWifjJ4X+UqBnblRf5kV7i6lnOeYo7DceWgz9PlH86hbb8ssxglpIsEmu32pzPJqHFCXs2ebN5M0hY9DuScnYb15ia+VVFpNaSllJKxShCD7ZxVda5uBIUMttMF35ZolQ/wARvXubuwJ8vUdJa1bb9tbEoP8A8dwaidWNolVnwyTE16ZzLqUN4mNvMGTyDP8ALf1qb0nWda0u7S/0W/khuIDlJYzySjfscg56d+tVVLoxkCyvXmQ/lSTBz6gkYIP1FSnxhe3SKX4iEkY5jJzKWBztkMPTvWk62nkkhLt4NyaR+Izxz0VY514/14W0Yw6XsInA5jzdXVs9Ou+xI71ubgP8bvEkd0o450XSdW08NiS500/DXKDb5gmSjjrt8v1rky1Op2DRzWmsxSI4ICZ8l8Z//Fvsan4rIahHFcXmhrOgQsJbHkjlIz1YqOoP+9T+mKjd0q35N/p4WeUf0e4F/Eb4U8f3kWn6brzafqEkfmfCapH5B/8AaJMlGPfAbpW16/ktY8MzTRyXOkXsFxcRglrVgVnVe/mKPmUdMMSUPTbpXUPgT+J6/wBPFrwl4lfNplvEIItXwzzWxH5Vn7suPlDY5htnI3FmvmRbxIp3cJxWYHZFKxtO1Gx1fSbbVNMuorqzuYxLDPE3MrqehBrJq6UBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpWLqep6fo2jXWr6tewWNhaRNPcXVw4SOJFGSzMegAoD1urmKzsZ7ycsIoI2lcqOYhVBY4Hc4B2r+SPjl+JzjzxZ4n12ztNZ1LS+DL2VRDoK3BMZjjwFL/wDJuUOyj5eY9Ns1vb8WH4rL29trbhPwk420q84e1vSkkvriwhkW8gLM2YjKSOTnQqGQAMoBBI5q4Z5GaQ8q9MmtWyRRZlW8yTXJhlCqs2ASFzhh0IH+da/Mtk8cfNt6GvtuDHeRSqNgwP03qyWuh3d/qF5p6oDIiu0eRucAtgfYVFKXUsV19lhlesDgMvOVDbZycA/TvUopje4CSshcoOQhsBtugPQH2OK8YoTDcMFBb5gGfrjB64+vf+9e9pbKhZNSilWFXKs0agnrgMM9xn7jatJNMnhGSSRI2NnYapMbG5Jtp40Lr5y4LY7Drv8AwNe44ZuLmcWqBJLWQ/sp4yCoPp+vapHR9Lt+LdRh4YvJobK/JMenakG5Ynl/cRmPRXOACSMEjOK8pb/WeGVS5SN47yG6a3ureaP5WdQcpIhwUcEEMu24z6Gq7Ut9XsspJfyWjxPAt1bwxyRpJu3lmaNWMakHGGxkj7irno/AlroVsbvidBHatEWjv7dh5DZI/wDMfdDuQOX5WG1Zem8b20OlWuraEqRargw3GnSTcwkOc8pUjEiEYKPsykMpOwLXew0mPi7gbUPEDwz1G90vXtOYHVuEZGEkNxgEkpDJkZxkqOjYIGCN685WP7ZvCJ1CEfuiiqzcApZ2Da3pt7bpbsgLsHiurWQ7ZHLkhvplX71WZ4IlvrWO+074D4tjHFdW0rPbOw6GOT8yb9UbLL1B/dqQ0XiXQ+IISkN1aaNqsiN8RZ+Wy2eox5350BzFKpGdmx+8pUg1ha9qupcOW6w+XBrGg3xxzHkaZG7pIwGHdeqSYyy+m4GY0zT6y2zDug12S0T9taSx6xb2ep601rqcaiSzvpG8m6i7cqzLs49VOdiDhgakn4ktGgSz4wskfVPMCxapYwmEzgd9sjm6ZA2J/dNUS1msuLdHOnam1yZYIiLa5jXLsgOQpU9WUnp1GepzkyGl8ZroLJw9xpbrrWmzBGjulILSR9FdSf3gBjBxnGDggFdZ1NrHyv8AdCNkU8/BubhDxk4y8GNWsr2zun1vhKSQtPp6tyo8ROCwQ/8AlSjqGX5SchgM4HeHBvG/C/H/AAtBxBwnrFvqNlKqljE3zwsRnkkXqjD0Nfzdu7i2u9MfRFKanbKPibG+tXbzHTpzJn94A7qd9mBB3xTOG+PuJ/DDjuDWOE9Rewu0x80LsIL1QclXjOx9ChGO+3Wp+Ne4rqypyuPGb7LTP660rWHgt428M+MfCCXmnyxWmtwIBf6UXy8TbZdM7tGT36jod+uz66cZKSyjkyi4vDFKUrJgUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBXF/42/GTRRw/qvgkukC9v54rO9GoR35RLR+dmZJIxjmcKqEKSVIkyQCoz1jxpxpw74f8ABV5xVxTfiz021A5mC87uxOFRFG7OTsAPr0BNfyY8bfEC78ZPHDU+N20xNOhnCQ29suCYoI15UMjj8zkbk+pwNgKjsmksZJqYZecaNfJptnEgdp/OcjLch2TPue9ZNrpTXM3JbRKwPQgkk++O1ZukaM2p33wlmfOkyOvzAb4+g+tbs4P8PIkWKNYsuceZI1c3kcj2/k7PF4rt8LRrfh/w41XVFYwxMRjl6coNbW0bwjuY9b/1C6mQyAYDKuD+TlIPt1rcujcNWljapDCm3oe9WuDQeSMMYxvg4Nci3mzk9Hdq9Prgl2NHW/gzw98O5e28wOPmB3xkg/bpUPqfhvY2sZijsA8Z/ebrjPeun49Hi8oKse3cY618m4Vs7mMg2y8zbe4qFXWfktfTUpYwcyW/hjpU1otsbdWSTJBAwQCcnb65/Wp3V/Cu11h4buWcy6i0YhuZ3+b4tI1wjSZ6uFPIW6kKh6gk7nfgv4KdXhRivpWXLoM0GlSanZ25ke1HxHljqeXdgPqvMKx79nwx9PTjwc3XfggVczQwK7oACUHT+42qLXhDjDhzXotdsUuvOhAQsAcyR5yFcjqMjIz0IyMV2FY6baTJ5VwAquMxyFdsHp+tfi80C4smDw26zxjZlzjI9KkV88YZG+PU3pYOIfEHhSxutTHEumW0lr8fI0ssJHI0cwO5x+6Sd9u+4znahS2GtWsdwFiS8spx+2tZV5oy3XmA/dOd8jHeu7NV4M0nXp3EtikWG8zlIGDtuP5mtbcYeDUumK1/w+GyMkxE5/TsRVinmSisNle70+EjkO2vJtK1J5bBriOB1KPCzZdAdsqe5G/1GR3qe1fydXsUvDEJEl+aQIdvOGMuvpzjBP8Aywe5qy67wfHLqDrcW/wkzEqxx8ufcdvWqnPp+oaFdSadeRlHYc0bdVk9MHuCCa6EeQp7Xk5dnDdbf4PzwpxDcW8j6O87Ro7eZZ3BO8MoGMEdMMNj7gelet9dx3UD/Gx/s7piuFU89vcKcEZ/U59Kq14ht71HXKrIx+meoNSF5qTTQzM7KPiUV39pVGA31IG/uKn6Jvsl5KUm8dX8Fw8NON9e8PfEbS+INKm5dS0+VWz+7dRjZo2ztkqSN/X9P6weH/Heg+JPAFlxbw7KzWlzlXifHmW8q/nifHRlP6gg96/ji12rW9tfjLTfllYnbPQH+h+xrfn4d/G6+8JuNlub0zXHDl8Vh1W2D7IuQFuVHTnTv6qSOwNbws6PL8MrW1d468o/pzSvxDNDcW8dxbypLDIoeORDlXUjIYHuCCDX7q8c8UpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKVi6lqFnpGjXeq6hKIrSzge4nkP7saKWY/oDQHGn47ON7aR9B4Chv1C2obUr6IdnYckIPvy+Ycf8hXCvmzarcfDGU21mDkkbFsVdfGfxCu/E/wAcNX4rmQxxXM3PBAFCckKgKnOAT8wQKDvuxNQPDVil/qUfmAmR3AIG32HoB3NULJJZmdGqGlA3D4YcGxQaYl89p5c0oATmXcIBtW7NG0lbdwVQcvTPqageDLbl0uNpFyfygHfAG21bJ0uxLQ8xXoe1ed5NrlJs9hwqVCCSMvTrUB1yowdtxVxihj5VUioO2t8OoUEYqw22MDJqvEuzM61tw7qSowB0rLlsA5Bi2IHSvK1fbY/epGOXLAcv8asRjkpzk0zFtbWNi0UyDfY+9fuLT0gujhOZSNwehHpWVPHhRJGOg6bV+o7pZIxhhzjuRipFFLRDKbezzTRrWXSbeIqFMcKxjbB2GP6VgvcmylFpdpzoRyrN/IGpuO4Xl5S+9YeqQw3du0b4JxscYP61vKKxlEcG84fgi7rTIcmaFELP1BHWq/f2kixkZJj/ANrb4+lTtq81ujwXDl8bqx71h3+XbOBj2+tV5ouVZT2aP464Ns75xcxxcnMSsjAdPQmtNcS8HTPpzcP6woTGWsb0/wDpt2Un/advpXWd/p8dzBJGwwWB3qlazw7Bf6ObO9iD4yAfTHesRtcWWJ1KaOFdb0a68lreZDHeWzlJYz3wcc1Vl5WRs4+UnlOex9R6V0p4k8CyRsNRtvmlWMJMf94HQ/XArQ2vaT5FolxECRI7Fh6ZJx98V2+HyFJYZ5jn8VweURmnnzdNuoyclFEmPXBww/8Axb+FWXSLhU0xbqXdEzbz+6t0P6j+NVnSCqw3jO2OWI7euRipDSXkaOeCZRh05cn/AHDYGrVsc5ObB/J/Wb8OHFlnxf8Ahn4WuraUNNYWo0q5XbKSQfJuB6qEYezCtq1yz+BPUPifA7X7NeXy7bWRgY3DPbxlsnv0FdTVbreYo59qxJilKVuaClKUApSlAKUpQClKUApSlAKUpQCtd+PFvrF3+Gnja20C3mudQk0qRY4YELu4yOcKB1PLzVsShVHHJIMo3ysD3B6/wrDWVgzF4aZ/D67jlh1CUggLKwHOehA7/TO/2q88K20NvdQOiZk5RjJ9d96/PH/DUui+MvEmhSx+RDp2pz2qqRjCLKwXbJ7cvc7VI8IROeJU5QeXnEad89q5V0n1wdmldpI6X4Rt+TRoXfJYqD/2rYWjRt8PlujHaqdo9uLbToIts8i5x2rYmlW58lFCgADtXnbHmR7CpdYpGbFEFXYbnas+2hY5JONq+xW6xqS69B1rLVQqgqQR1raEGHM9rckDl6/as6IEOc/9qworq1E5jaVRIg3B675/sf0rIjvIxcFcggEAHPfft+lWIohm8khICq5J2/lWII3V+dATnJxjrWfBIjkZ3wfWvR418zY4WpMZ2VnPGiPQyDYge9fJHlCnmyDUj5cSEMACCM1iz3MEibEZB2GetY6mYzT8Ii5sO+G3asGVWLdBge9fNQ13TbT55bhAzfLkn9P4CouHiewvJZIonUNFuxc9qhlgsxyes8aknlGfbFV3U42aE496svm20xzbzxyK3QhsketROpwfsGIByO1RNEsZ7NWcRQR3UDwSxq6spU5HaufeL+FF0/TrpOXKPnH1ByK6P15QknN61rjiuzF5psjYJ5FPQe1WePPqypy6+8TkqeNrUXScxUONhjvzD+mayzeFEjYRkK7KNuoG/wDHcVK8SWAa7by03Bww75/zFRUAjns47Z9v2rbk4I2wP75r0EJqUU2eRsi4yaR/TP8AA/o9xpn4W/i7i2uYTqWsXV4hmTlEiYRFZO5X5CM9yDjauka1/wCBkd3F+GfgGO+hENwuhWoaMKFx+zGNhtuMH75rYFW4+EUJvMmKUpWxqKUpQClKUApSlAKUpQClKUApSlAKUpQH81Pxb8HycL/iX1e+jixDrax6lb7jfnHLKAAdv2it19aqfhRYrda6rSKrCEE8x9fpW+fx5NajjPgYJHJ8WbC8Lv1UxiRMKB683N9q1P4VWgi0y5ugMsZOQHPU7VxuZ9rZ3vTY93E3XpskUd5F57rHED8zN0H+bVco+IbKz055kkT5BuZByqB1ySf+laP1fiaeG+FvZ27z8pwEB2J98DJ37ZFYtzp+tXy4nvYoreRQWhVs4Ye2+Bg9j3NcSUdnolNtfaboXxW4enhlNpqFpMYV5nxOOoqtat4zTzF9PsI0jlY4BKc4f/iCvr233/hWqJOBpZdQ+J+MuhznJaAhcHp0HTbasU8BPYziRNUu0iVsornmx/n9K2SS+TMVN+UbJsPEWY3w1KUXMTxwHnj6pMOZd8f7hjr/AMj71edN4pmvb+Py0MsdxNGrbnMShSzEfcKPvWo9MtrSOR/Ou/M5gAQ3f/rV40PUrKxYCL5STzc2d8nH9q1bRerjlbN4aXqISyXzGAY77+9Zp1NMEcxYf5vWv7TVjcRKImwW3HepQSy4yTznr0xWY3EU6E2Wd9SCnHNue1Uni7W3tlMsDt8qnYbDPTr26/wrH1DWzac3Mx9zmtZcT8aWbFrZpAw3yAeu22az3cjaFajsrnEfEUl+0c897Nkqbh448KiDAxuff2JO/YCqW3ibPaqtrphyVcsWkPKjY2yx6n/vX61fVra4XyVUFcEco26+1QCcHy6tKJYraQgnA5dtvYDpUkYwX8itdKb1A2FonirNpUrXNzrT3U4Xl8uEDlx6ZI5evfr6VctK8bYdZheFrN4plB5SxDZI7HHT6jIrSj+HN2YuV7K4/NjmYk714z8PR6YDDG3kvylcHY+/9qdIPwV17kfJuibiOPWuaTEeOTIkhcOObuCMDGNv1qH1RQYWTcqRWqrTUZdNDRPOecHlDe3Tt6f5npWwtK1Qatoy87iSYABmI3+/9+9bRg47MK7Omac410pbe4keNAGBOf6fwqm6fpsV5rEFiWVFuJkQORkpzMBnHfGTW1ePrMi3MpTmDfKRUJ4Y6Pa6j45cJWN2gktp9aso5EJ/OjSrlf0FdSiWVg4PMgozZ/WTQNFteG+FNM4dsWdrXTbSKziMhyxWNAgJ99qka+scux9zXyuwcMUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoDkn8c1lDNofAt0YVMy3l3F5mNwpjjbl/UA/atJ+HUUkfC8xO5WViAem1b/8AxsQseCeELoNgR6hcIRyk5zCD16D8nTqe3Q1p7gbTZIuEbaIIA0q82Pr/ANMVw/Up9ZM9F6PHKP1baWI5JLyXBllbOeXHKPb0rKur61sjH8XMxZ8mOGMc0j49B/U7etTt/YXcNkzpAOULsSKpM/CWraiZpWuJYnuDytN+8EH7ijGw7+5rid+z2elhBxWiZPFWh2FrJLqWsafokSjd7iUzOD/7UwM/c1rrXPEfh95ZZLLjFZDGwBEunOq4PQ8xPerLxB4VG98MLjQ9NsoW1h7iO5ilZeVpwrZKM7d8E4ycZA6Vq7/9vPiXccQRz3GiajJBGwbBki5SMDPKxkwAMgY7V0+NRRKOZyOXzOTyqpJQgTtrrt7cKtzzW95btuJ7Q/zH+GrBpevTi6jw5YE9871L33g5rPDvDGhabpOnSSalFEVvJYeXy2ZmLchyRzhS3KG9qtHDfhrf2lk11xFYLY3anEUL4bzVPQjHTuMe3vVS+MYvEfB06JzlFSksMunAk/xvlmUbHGx2xW30060azL8hzjOT1rXeiaba6ddwQQ7MqgsT3PethpcxtZDoDjFVa9tk1sZNJo0h4vXH+k6Y89ujbHqK5jn1a81O/Z5Jiik9q66430231SV4LiMNEwK4rWkXhJp02j3P+lWpn1OONhBaySeVHKx6fN2xU9coryR2xm8YNT6Ba3WpXBXTLFZuXIa6un5IVx79T9q2boHFPCehypBxJ4iaLayAhfLtbPzWz92J2G/brXlwZ4W6pbcSRTcdWbGxiPLHp9owMIx05gDlh7e++a1HxN4H+It9xDf2PDmj6ndWB1CWSF7OINFKrk4chTlTghTkdsdKv01V2PEmc/lW20LMI5N9vx5wnqc89tovHWmXfKTkXFsFB+uG26VReIbuxe7b/X7WAwDIGpWLF40z0Djqo99x71S+BfAzWdNur264nsJNPWO3MKR3hEUssjEHZASQFwdz1zgd6m7bgHVdJllKXct55jEFDkIw9wevXv1zWt1UIP7WKLrbYZshgwZOGneQmBo7iBzlHG4PuKleGrO5stQEEzgADGCTkg/4KkdI0W+0y28i3tfJjc7wEnlX3XPQe1WGTRLhB8S8J5vzE9sVXVvwSSp+Sj8fQoujByDs4O3vUV4AOyfil4DiaOP/APmIVY467Nv/AGqzcX2slzoc6Rx8zLgjPt1qR/CZw+up/ir0i8mgSaLT7O8vuYw84VwgjQ5/dIL5B6g/WupxN4Rw/UdSb/R/RcdBX2lK7J58UpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFOpwKV9X86/UUBx/8Aig8QouNYrTgfh6w86003UjLe38q/mlQNH5cQ/wBoLNlj1wABio/hWySNYFRQEVQo+gAFYHEtitnxtxAyopibULiV/YmZjn9aluFZQII2UH5hnbtXk+ZdK1ty/J7zhcOHHwofgvkNjavAAyK2NyG33rGvOHFu3E0aKuNwBtms/TWVlyq5qXRFYAjGT27VzktnRaaKnFZatC5WOxDRjv5uAT69a+x6TqU158RPa28TkHDkeYw3BIBPTfHSrmiNyjCD3rISA9woGP0qeKZp2K4mnzSSF7uVnPXlPr/0rFvrY+aCW5mBzuOnarLdosUeE/N+Yk1CMoYuWJz7+ta2NklSXlmBaQhLsFhljvVshw1vl8g46VXbaN3ug5AzzYGas65Wy6bgVmuBJZIoXEkJ84gYK4yPrXlo9v5xAYmN8Dtnes3XYGZmcrtn9Kw9PlFvOoG2TWHHGx50S13pt2B+xfEnc9mFRcsN8oJuNGkuGGQGjO5/lmtgWcUV3YKXAJx6dNq/E9oUcKF5iNsg71Nh+Sr7mH1NWXFpLdzOTwzqUcpbmJYkZI6dWrzj4XuZrhJzaxW+P/unmb771s+RMISAwx15ajriDJYqmT16fwrSWSRfd8FSvNKiiRUaNSox0G2ajr+ziexflQdO9Wq85PLPMBkdh/aqzqUqiNwD8pB29ajSeTaUdGqeIIsW1z5YHOFJUeuK8vAnXLnw/wDEWPjjyC2lrbSwXduW5WaFypJU9CV5QQDtt26j04nk8ppAMfMDv71rzWtU1HVIbfQNIZ4EuZY7dkiXmYK7hMAepznH966lM5RScfJxrqK7LMTWUf1Isry31HTLbULOTzLe5iSeJx+8jKGU/oRXvWBoekQcP8MaboNqcwafaxWkZxjKxoEBx26ZrPr0i8bPFyxnQpSlZMClKUApSlAKUpQClKUApSlAKUpQCvhYqpYdQMivtfVxzDPTNAcZOs13qmp3F86ym5kZpGAA5ySS2PTcn9Kx+GpViUK+3J8uPQ5qY4pt49O4xl0pByBL2QcjdQPMJH8MVWrWR7XijULaQ5Hm84x03+b+teMmnlpn02eMxkvDNpaXJ8i8pq02UYdQcDfrmqXokvRiRk4OKulk/wCzGOhHXPetYJZFktaM9YwBgY22r9sBgL1Oe+1fgzAICSMZ3xvWNLeRrKObHMO2O9WHhIrpNs/F7hY3Oc4FVaaV5n5IgQM4JqT1a+LxfJgAnlOPeoDUb6KztUlVgGGPlqtNrJari0izaXAXjwAM9M96stnpbyRsrnlVepJqj8P8T20sYl5lHU8pPep2fiaB4GIdcEZyDUtTS2Q3Rm9RIzim2jtomCP8p29TWvvi5La4DOcxk4zXvxRx/pkF0YLi4AP7oJqN0/VrDV4zDEwK8u/cD3rEknsmjmOEzavC1/5kKBjnNWmWNWjyNya1Twrqq2w+D5mbkPLnPWtgw6qJV8sde9SVtLTILqn27I9LmJctsCTvn1FRFxGImwTgYzipSSdTFy4Bz3J+1RFzJnPTGc5z0rEom1WUQWojAYruc96p2rXASJx3A7VadWmUBzzkDsPSte63dBVJDbnJGfSo1FEk5pI1zxRNNNfRW8CmRnYKqL1JNSHCfD2n201hrMDB7w3NvOQ4/IyyKwGPbFfnQOS98UrNvldbbmlIPcgYH8TmtmcJ8N54xsp0Xlje8SRAQMBfMBxVvawkUKY95Tn+Dsht5GPua+V9b87fU18r1B4AUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoDjvxe07U5/EXXbuwjkWW3u35lxv1yCPqMGoCSZ5r+y1CaLyJ7q0RpIj1VxsRW6vGHRZtP44j1m3kYR6jCOYEZHOmFI/TlP61pXXg3xcM4AHI5Bx3yK8jyYuF8ov8n0Pj2+9xa7P0v8aLfoV4WwmfmHy5NXmxuSIAOYZ9zitU6PcmK4JLcvTrV0s9RZIcKds+tVs9SzH7kWi41AIn7qAdTmsO3ma6uRg4Ue9Qs81xeOsUf5SRlqmYSkEQSM4KDJzWfcyWFDCwRvFtxJaaZHNAOZg+SB32rnPxV4p4l1JI9L0G6msnl2d0yrgegPauhOJMXNliC4R5ACeXOcVqLWdTSwb4Z4Eku1HzArjkHoT6+1bRklLsbdU4YZVvDiXxC4dsjbcQan8fZMTyPcN+1h22w5/MD6Hp2qa1Ljq+RJIbZyCpOWyf1rB1HjK2a3jtZQrrMmZFTOFOOnt69qhbjTrO/thdLeyQxPhQCdzUrl3l2ZW6dI9YM1LxnxxxRq+sGa0drSJW5QWUM7e5J6fQVsbw844vF0hIr1o4502d1OA/v7VXtR4ZkluSLaITR5AO+4z3+nvWVw/wCFuo3Wt20hsJre3eby5JCMrGe+R61ZnOEoKOMFSquatcs5ydM8JpJdaBBqDYRrgeaCe6npt9MGrRZarLBP8PLI2/QnpWBYJFaaXbW6sDHHGsSsds4A/tX6ubbz1zERkHaqc38nV1jDLWl8ZIPlbP1rEuLrlDbjYdar9pfzxH4dyQQdwe1fLu+AUgsR3371hTbIZRS8GHq+oEqfm3K4H+dq1rxDqHOWKncJ69Ksmr3reWy9mBz6Vr3V5iUd9hgf96mgULp4PHgh5BxNd3iIZpVTlSLm5eck9M10Dw3dXC8b8MxXccPmXl9EiQIcgHOT+gB/Suf+FtHvpoX1O0IBibocjmPrXRX4d9A1XU+NrzibWI3eLT4fLgcr8glcEYT3Ckkn3FWa4Oy6MUVJ3/T8WU35ef8AJ0udzmlKV6Q8QKUpQClKUApSlAKUpQClKUApSlAKUpQClKUBWuOOE14w4ZGnC5FtcRSiaGVl5gGwQQe+CD29q0/rfgNxHLw9cy2+rWE1zADJDZojZnI7c5xykjOBg77ZFdC0GM79KqXcKq2XeS2dDj+p8jj1+1W9f0cQ2R2QkYZTgg7H71dtKhWaDnJxnfFVrXNIfQeO9Z0f5itreSopbqV5sqf0IqwaBJ59o0QOH5SFyfavI2xcZNM93TNSimvDPW91ddNtXkVQcfKFB3Oen86wrrXJE095fMxKud1PfHp37VHXSTFCZgjKXYop2Bx7n6E7VqXiPxITTuL3sGsp7pFLN/4aLzSvuQPuf0rWEHN4RLKfU2lcaxqd3ZNdWsjLHFsoXBL47e+cn/BVS1rQJrqeOSKFnlJLsg6KANx/nvUHw/4maebX4VIdSkbJCxvbMrfUjH2qzQ8aM8nnNbJbyv3mVo8KevUVKqZp7RNXF2LRqfjjTp9KtLfkLtJMCW5QTgHblHv8vSv3ptwbzQIdHXK3LcrAqrFgxOOX+v22rcVlccKalIs+rNY3Q3UGOUAp9M9/frXl8P4YaNP/AOHspZXc9eYMMZGFyPpVhRaX7I58OfbT0Q3Dtja2uizM8XK7MArMvMF98dcev19amLTVhZSm2ktjDErYcx7/AD4IxjbPQ7jtiorUdVgNrIum2bLb8/MC04Eig9sdf+9V674+4egmjnmLlkHKYmwQfXP+dzUftSZidTqWS+2HE8clwbKRyEjPmMsny5X/ADB9qtMWqqlsSZgOQZbmHVSNj/1FaNuuO9Bks4ri0vVBjVgUkZQWBG3XoR9T6EGsLRvEeO61W3jt7uBocBDy4JGTvWvsz8tFf6pZwdAxapZ6hErwyKsgJ5hjfl9f5V5apIqxYJGcdPtVQsIvhoVuPNdlK8wx8px0J+/SpS8vGl0qKYSGQOuA3r61ovJK55RD6hO085UH5QMZqrvpd9r+vWmjaZF5t5ezrbwRc2OZmOBv2Hcn0qw3rLDas2QSRuKmvAjTpdY/EZoQCMU09Zb+UqTheVCBn/5Mo96ucaHeaicnmWe3W5fg2foX4ZtZ0OGG3TjSzmieMNcc1o2UkIHMI8H5lznBODW9uF+G9P4T4ag0XTedo4yXeSQ5aVz+Zz6Zx0GwwKmO1K9JVxq632itnkbubddFQnLSFKUqcqilKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUpQHNfjbo503xVGpIgWLU7ZZQQDvInyPn3wFP3qmaTeCC6HOcHOK3x45cOS6v4fJrNqpa40eQ3BUfvRMAsn6bN9jXOSSHCzKcE74rynqdPS5/h7Pb+kcj3ePFfMdf7/wBF5vtMtdZlitbeFlzuznou386jbbwe0LS9Ul1ONRJO6jmJHXuTWZw1q6kjrzlccp29quJufMjGTkkfrXOjmPg7K2U//wCjtCjnM0enRJMd/MAGc/3rIs7JLTmWdY5gx3516ewqbnt/NAKnBFYcsdwkLYQsO4qzXbJEsLXDQltuGbiPyLvSdPlEmcuYkP8AMVFTeH/h5LkHhbSmckHmMKnP0GcVGarbXAmy0EnlkjLgdN/TucVByPcS6r8Ctvcsodk5lb5iuQARv7H9asfUv5Rl3JeMk5d8K8E2sBW04U0dHAIk8y2jP3Hv96omqeHXC+q3ZY6BphgAOVjhAJz6kYq6Q2UzTNzWLKBjZyT/AJipMWEyx55OTb0H8aO9/BmVkZLHX/01BF4D8E3cqrLpbKHPRTyj9O1T2j/h24Z0m8GrW0XOiD/yTsM9iMVs2ysWEod26fbNTZ1COKIpsq4xUM75y1kqSqhnKSNb3tounwR2s8amKSMxgf7Tv/n6VBXl3HJiGMBAm2FzjI7+1WvjG+gRcxBM/riteQynmMjnAOce1RQRHY8aGqzosYRsbrg1uT8Jugyy6pxPxhJy+UFj0uEb8xORK5z0xjkH/aue9Z1FIuZi2656b1294G8I3PBvghpOnahbG31G55767iJBKySnIG3ogQe24rsem1Zs7P4PP+sWqNXX5ZsWlKV3jy4pSlAKUpQClKUApSlAKUpQClKUApSlAKUpQClKUApSlAeN3aW1/p89jeQrNbzxtFLGwyHUjBB+1ce8XcMT8Hca3vD8zSNDC3Payv8A+rE26HPr2PuDXZFc/wD4lIhDfcN6hiU5jnhwoyNijD77n7VzfVKVOrv8o7HovIlXf0+H/wDDUujX8VlrQR3JMmw3671sa0uS755sow9c1p5NTgt5/iGXlIOMD8wz0FX7QNUF3aZflXbOA2wFeWlFo9pXYnovFsQ69cn+dSdvaLIvzYA9KgdOuYSyqHGWGcirFbuBGGzzD97Hat62Ysf4Pl1w9DdQ8oCgnr71j23BdnBeG4l5GZuhHbfarBGshRAqgk/yrJUFiy5+oA6VajBFWV0lrJW5dCijkIQcy+vTNRV9p8auUzkD0q0386xsRnqcbVVb++iCGQNnfAz3rSxJaJ6pyZGufKG52Peq/qeoiBifMUEbkHpisjU9SVHCcxywz9BWvOMb4ZJZjgId1bBA/r61FGOSS2fVZI3ibiWCbUFt1y+/7wH8D61FzXJW0aViFJ3qqWU3xHEXmNOs3KQVXBIJ7k56GvbiDWVRCiMQMbYqzGG8HO97OZMunhDwZP4meN+n6WULaTp7LqGpSdhEjZVPq7AL9OY9q/oMTkk7faub/wAGWlpD4Oa1rjRfttQ1dk83IJZIo0AHrsWbr9a6Qr0XDqVda/LPJ+oXu2158IUpSrZQFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBWkfxL2wk4J0ScylSl86AAdeaPOfty/xrd1an/EKit4V2pZQcalFjI9UeqvN/4J/0X/S3jlQ/s5E1u9k07SmeGFmcfv5Hp1+52rF0rjBtPFtaSO8txMw5guW5QRsoA6mrJPp0V1A0c8KOMYw1au4h0jV9FvJNVjLLBC37FYvmIGck47bYGd/tXmK8T0z198ZVPsjfumcUiC7jSTCFctygjYDsffOavWn8Sx3Ngs3OgVn5Tvt19u+1ck6LxfJeXU8UfPHJyZxkcqY3zk98nrV/tOLbTQ7CCFb1FRmKhwMgE5wx9s1rKlxZtDkqS2dIjiV7fNvzDnxg56ZIrzfXp1jE0bNyoBzBupNaPXiv4u380XPLdMzxqGYLylVzv74Kj7j1qYi4zieO4YTArbxjGG65AyCOuAc/Sn3LRJmDNk3mvje4d8coyfUEf2qi6vxVCt75OzKDkMhzvnp9qrV/x7Z3kc1rb3KRzxRygq42kHKDj7ZBz9K1decaXEGlQpKwaWdeaOQEk82xA+3OM/atowcns0nyIwWjYPEHFcEaftJHHIxJdWzgY/tWqdf44M+oowm8rDcvOSGyMbH+Z3qqavxVPJJLb88jTMzbDoFAAyD/ABx9arxLyyM53PQhhs47j/rt26VdroUVs5t3Kc3ot1pr1xa3biUK6lz842LZAOcivLUr57yfnLZHX61HWUTBmc5CFV+XGN8VnpbtKwCrmtsJMjTclg/oP+EqCKL8LWkyRx8rT3t5JIf9zecVz+igfat31oj8Juv6NeeAdrw3aToup6TPN8ZbM+XxJIXWUDryHmx6AqRW967tDTri0eb5UXG2Sf5FKUqUgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBWkvxDcQWaaTpXCasrXs8wv3XukS8yqfuxI/+JrdoBJwOp2FcI6vxmvH34ruPbqK6NzY2nkWNi3ZY4WdDy/V+ZvQ82R1qj6jPrRJI6votany4N+ESptfMgVlX5iMYx1qJ1DSY7uwkgnXmRh8yjqRVritvLwGOO4FfmSz8xscv3PpXk1Nrwe6nHJpTUfDRQWm0e6khlAGA2Dznvvj7feqdccJcRW1okOpIrKmSvzZbqTykDrXRc1hySHG29Bo0F9Bi4iVsbdOtWY3tFCfEi2c229vxHbXsUt2GIjUy5BwpJwSMD3x+gryudb14LJKpRTICZcA5Y+h9t9/et9alwNBMrKkXKMdMdap+rcD3VtHyW0IdW/4/epFam84I/pmlo1Fc6nqRZJLdXaQcxbl+ViSBnJ7j+YqGnivb+VmeZ/iXAUDJwgGP5AAAVse/wCHb6zLM0BPfYf2qGks7hCAIiv0FWIWY8Fazjt+SrWWkOB5t4waTJ5fboc/WpWK0IQqw2OwHtUj8G5fDjB969REF65yfatnPPyRRqSeDHSAtVg0fSnIDsBj1Pav3omjS3cwITI7Cr2mli2tRGFPmEZyB3qGdiRcppya41PjrX/CnxA4b454ZnkiubC75ZolblW6hYDnhkHdXCkH02I3Ar+ovC/EemcX8FaVxTo0vmWGp2yXUJzkhWGeU+4OQfcGv5XeLmmx/wD06ykZfzEKDHfmx/I12j+D7juLVOCdV8P7iWT4rRJRPbI+CPhpMAqpHXlkDAjtzjfrjs8G3MEjzvq1DjbKX9HS1KUroHHFKUoBSlKAUpSgFKUoBSlKAUpSgFKUoBSlKAUpSgFKVWeL9f8A9K0ecQScjqhMkufyD0+p/hWllka49pG9dbnLqjWv4hvHDS/Dfg+64d04z3HE2q2c0Vp5BAW0yAhlds5BXmyoAJJHbFcYeCMnL4izQEovn6dhQRvmOQc36c35e2dtiKiPE/jabjjxVu9ZZ8W0Y+HtwT+4hbf7nmP0rA4R1o6BxlpXEMzlYILkRXRB/LDJmM8w9ATkH93BByCDXH5FkrovJ3vT4xosi/2ddfCqQpJwR3o1swfAGcdfas2wVZoFKuMYypH07Vlm3+bfAOMA153Z7BtFbuLbkl58bnrkbV62sYEgblGR1zUleRApgj9etRwjki3IJT1qSLI35JB7ZJYQeQFh3xUdd6dCMAjY9AF2FSljdJzAP8vt02rPubJZIxKQrem1SozFaNbappFq6HmiV9u1ULWNNsljYRwqpHXAxmtrcRoLXT2YAL1ByMVpzVtVWaaSOM8xzgAVLA0tSSK1eWiAFlGD9KxrTS3nuQmMZqfMBfcjmb2GantA0UyXqyzAZz8qYyal7YKar7MzeH9De2tkyhCH23bvUzc2yjnwoGBg/wBvrVls9K/Z+aV5RjPr+vt9KidbNvZWMs8zhYowZHdtgAO5/n/gqvnLL0YqKNIce2f+p6/p+ln5wzmeVAhfEce52BHU4HWs7ws8Sz4a+OVpxkLaa7sYxJDdwQyKJJ4WUqQDgKSDysAMKCAB1yIG4mN9HqPE94SFv38izjckc0CnGyDDNk7nOFGUOT0qo87knMhy3Xf7b4/TA+g7mupW3BL9HludNWzbP66cLcSaZxhwZpnE2jyF7LULZLmLmxzKGXPK2OhHQ/SpeuRvwdceytwrd8F3UvOdOIlhUnJMLknA+jc36iuuFZXRXU5VhkGutx7vdjvycG6r23+j7SlKsEIpSlAKUpQClKUApSlAKUpQClKUApSlAKV4XF5bWo/bzKhPRSdz9qhb/UpruBY4A0ccvQdGI9T/AGqGy6NfnySV1Sn4MjUtdjgZrWzPPcZ5OcDKof6kVqLx/wBTPDXgFr92khE8lv5ETE7+ZKwjB+uWzWx4YEXUoI1XCqOY7fYVo/8AGbeJZeAtpExx8XrNpFv+8A5f9PkrnWzlc9nRpgq/BxNd6esM8ca7eUAObONgPX7Df2z2Nfq3tI5reaylzyyKUAGxyRjAz3IGMHYgYO61Jcq3UWZiUwcgk+2e/wBPpsewbPgkaR3SBlI35cFc83bHKeo26ddvVTmspMvdcbN7+A/HJ1zhAaJqVwDqmlsLaTmOC6AfI2DvuMA57g1ujnVsA7Z9TXEUesS+H/iXpfEttk2N6PKnCtzB1HcP+/gYIP5htzfMTXX+g63barpcNxDIssbqGVgd8dRXP5dPWXZeGeg4d/uQSflErdwEjJBIPc9qwChUnA6+m4qYLpKAFfvuOleLIqkc6gjpnpiq0UWmyDmjdSrwyBCD+Vh0qc0+5efTvKmZgRtt2rHkhjb86Nn3FYIuzplw0jHMfQ4xUi0bop3i7qvwGhJaQ7zTEgMAcgVqPSNMuLiITzEgkk5atg8ZaiOI9dWK3DvHERgEdPfbes7TtIhjt1kuMo4A2LAADttU0Hoisi5SKpaaQ5dcxOvcl+p2z+lXvQdNhj5I0xy5wWwf8+1YjxxGRpFLHc/N2Jx61YOHlSIF5Axb19fpSTyawjgmmg5LZUZSSN8Y7+p/zatO+J1yuo6nbcKwzuPObzLlo0DBUG75JYAEL8xDbEAittcR8QWWi6JNcysSyqSEX8xJ7D37VorT3F3qWqcUTBJXX5LdlVZCMb+Z8wCqvNhleQn5RIoBIramOXkg5t3SHX8lJ42ubaK6Sws1WO3jRUVUJZG5RjHMcGXHQHCoFVevWqZEE5y2MgdB1/7/ANegwN6leI5WutTmm5lcM35w7PnB/wB7bv8AXZRvtUdyYXHJ+Y799/v/AF+/YVfS0eZm8s3r+Eqdk8fDbnJFxp02WzsOVkb+P+bYz3G2rX2jXwQATWjkjy36qTvse30rjL8Ium+Z4z3VywB+H0uQ82e7yRge/Y/XvjYV2LrEfxMU0YJBC5BHYitoWOLyiKcVJYZabHWrC/5Ujl8uU/8ApvsT9PWpCtYWEiTRmOYf+7HY+oqZtuJ9RsZ/hLmMXATbLbEjtg+49fSr1XMXiZTnxvmBdqVE2PEWnXnyszW8n+yXbP0NSwIIBBBB6Ed6uRnGSzFlWUXHyKUpWxgUpSgFKUoBSlKAUrAv9Z0/TwVmmDSj/wBKP5m/6feqxfcTXt0THARaxnpyn5vuf7VDZfCHklhTKfgtd7qdlYIWuJgG7Iu7H7VBz6/dXbGOzT4dSAeY7sB/SoCCEu5llYnfYt/Os6FF5lRGGW6nOMD1rn2cuc9LSLkONGO3s9Y1aeQ83zM/Vic5X1+5/lUgnLzsRgD8ozXhbkJG0uWHYHrsNhSObmiZs7DrnuarxZOe1opm1SSUb8u21cy/jpnkbw34UtVyFbiCLI9cRSGum7AMkZcDBbfHrXKX455zHw9wOCMD/Wy5J2GRE2Pp1qSvyYfg51EASzjjZuUqRgjbOOn0/L//AF/4HPgU5jySJjkIyoyP0x/7e24xtuu+XbObmIFmZSnQk46e/b8vXty/8Dn4Yv2bmRvLfAxg8uMdPpjH25fWM5rJnQ8mbqmjR8TcAXluqc93bL8SmN3KjqSoHzjLYDpuSyBwQoNZPgf4gXFvcnhfVZirxkiHnPp1SpbhCUQ3So3yDeUkALycuVMgA3jcAkBxsrBQwxg1q7xA0i54S8RmvLaJLSPzB5ccQwFGMrynJ5xsy+YMhihIOCKy4qyLgyxx7HVNM7Us9SQqsocttgj0qS88SrgMAuex6VpHwz42/wBf0JPOZjdRYEg6j2NbRhvGaMMhUrjtXMlHq8HcUlJZRN85C4ySuMgHaojVIJJ0YIjKCN+4+lZMOo+UOZiQD/H61nJd2lzGFUhXHvg1kkSwa+GkNHcc8SkEnOw/tis97dwnLKQvU7n+Qq1XLWkKj8uR6Hr/AAqka9xDCrNCCgbtzHvWyMNmPd3PJL5S7kn5mxgH+9SFtfpaW3NyB5QMBT2NVu0kkmkM1wy7nby89fqOtfdcuhp9qXkLiTHyqo/L/nua2UTTukQHFup3+oXKW8DXMjzSqkKW7BWDE9QxI5WADFW6BgoPWsXX5rbSOD7PTbeOKQcgeNhGWSXIBEkUJ3fPNnzJNlMkgAwK+8Lw/wCs8T3eqTo0sFuHtoQpWZXZfmlMIAAYMqB1cnlVohudhUFxzfq8Vw/mpIrPyyzRycyzP3LSdZSTzNyrhRzVagsNI4XKt9xtmtbyR5tQaR8kn5i7uHJwfX2/QdBvivEMwKpyE/u42GMdf0/h3yaM0jzZIIHttn9Onbp6469P3DlZsBcnHQY2A/h/Qe5zVh6Odg6s/BtaeZqvF2pvDkxpbWkbkH0eRhv9VP8APrXUd4P2rZHfGK5//BlaNH4PavqDoee61mc5x2RI0B/getb61KQRFyDzhuvuaxjDNJbIGWNo5zNDlWRug7ipC9n8/TorxAmR8kmT27H9f615qA8chGOYjYisaNlEM8EikjqBWTUz57U3FgmoRHddm7/as2wv7yKAyWlyUbm3jY5X9DWFoM3mJNZyEkSLzYO5Br82o+FvuQH9mx79vasqTi8pmGk9MtdpxNbtiO+QwP05xup/qKm4ZobiBZoJUkjboynINUG7VfMDcgC46+lYcdze6ZdedY3LxBtyM5B+oO1W6+a1qaK0+Kn/ABNm0qq6dxlCy8mqxeS3/wB2MEqR9Oo/jVltrm3vLZbi1njmiYZDocir8LIz/iypOuUPKPWlKVuaGHfarY6cv/iZgHxtGu7H7VUdR4j1C+bltibS3zgBD8z/AFP9BUMoMqySyu7yE7uzZLbdzWUIkDRgZwB0zXJt5U56WkdKvjRh52zyEAUMMqWO5Oa94IicDGD/ACr1SNWnctklRkfpmsmCJSebcbDYVUbLAEWAA4BHoRXoGKnmjPLn5V9sdTSdQqkDsCf4V9gIK4KjA2ArAMiVuW1VB0xsB/n1r8uQluIxsTvSZ2dyT+6RgCvNiTcLk561saknZfKVJ2AB2rk/8dELX3CfBskJccmuqvyjuY27/ausYnIyB0B2H6f3rnH8YFvFP4YaNJIMsuv2fKfTm5wf51LB4aMYyct2samz8tlQFRnKjr02wev7v1/Z/wC5qYMsC4TDDYFTkdcd/sN/+BP5mr9RuREzYBKnG/ccqn//AEYfTHoMN10p5SSxMLMwboxCFtx+o+jEemKx0kS2iXHlanbTwl42Vx5bxkqynGxRj0kwDyhtm5Qrbg17+JWiRatoFvfcsUdvIjW7PGo5IsEBMcxAjCSKsZj6riV9w1YOlZ+IktySyCdozz/NzqJUU82djkHf3365NU3xK8U+K9P4x1DhGwezt7GO5FvJJ5AkluFVUVTIz82WAyAww3zHfet6q3KX2kdlqgtmT4e317oGuRtHlWU8jI3QjuK6o0WWHUtKiu4DyHGSPQ+9c16faqviDqNo8ssyxXMqiSVuZ25SQCT3O1b74Fd1t44ldgrDJGfbNVOQsHc4ssouETMzNHNGjL1JBz/CvOSzjZiYZOTG+MEGvV/lDMuxUZFeVxM7W3MQuw22quXexHXulvPERJetGPWoOXQdJsvndjI//IdffG1WGTZQ4O49d6irk+ahZxuDjYnFZRhohri5k5CLbESDYyMQD9vSqVrd9ez6lbWNjJNNd3LtFA8HzOjqAzMkfV2VSGwcBsgZq++WgVZSoZmO5beucPEDjjXeGbu21HSzardyp8PJNLArsyMiSnrsDzuTkYOwHQYq5x6vdeEcv1Dke1A3nHp9joXCkenWDwxWjKpDrIZI3YDzBuPmuSpHmIikIFeRf3TWneJ5/OvnRvM50PKyzN+0Qf7W5fljA2HKu+3vVr4A8ROIOP724tNaFpCf9Pa4aayiMUjAIsojByeSPmL/ACoF2dh3qkaqqNIGCKiGR0WJByqoUnoPXbqcmp1BxezjuamtED8zc24DdB/Tp/nbqSazrSAspkBweX5dx09u3bbt9uuLbosmS6gjyg+OxPKT/wBPpn1NS+nqohebGWDsMHod1/nnf7Vl+DQ7S/CXpi2H4cdPuFdma8uLm4cE7AmZ1AA+ijfvW279RISu+FGSvuapP4f7aO1/Drw0sXN89ozsSdyzSuSf41dr0/8AiS/dVyK1b2RswYyAXiVl+UAj7Df9MVhzFijuhyMYz061IQBZZgWRQeUnasFzzWk4P7hOMexxWUzDPtg/lTrPz45XA27hh1/UVLXsEioJ49z1qvwyM7SKcbx5P2YVas82nR825KAkn6ZrDMmG0jTW5LE83LsMd6w5cCI7b9GBr1nJVlddiQRt0rGeV2aSNiCOXPT2pkH1UjkCtttt0ryHx2n3Jm0+4mtmc7tGcZ+vY/Svew+YZYZ5gM1nMitZliN1O1bRk1tGGs+TM03jlo3W312ALk8ouoB8v/yXt9R+lXCC5t7qBZreeOWNhkMjAg1q2eJGQoRkc2M/bNRiqoyAoG/barlfMkliSyVJ8ZN60f/Z" alt="Юрий Кононов" width="52" height="52">
+    <span class="who-txt">
+      <b>Юрий Кононов</b>
+      <i>CTO · автор курса</i>
+      <a class="tg" href="https://t.me/ykononov" target="_blank" rel="noopener">@ykononov</a>
+    </span>
+  </div>
+  </div>
+  <p class="lede">Курс о том, что такое AI-PDLC и чем этот подход отличается от привычной разработки. Ключевая мысль: результат определяет среда вокруг модели, а не выбор самой модели. Без установки инструментов и разбора промптов — на уровне того, как устроен сам процесс создания продукта.</p>
+  <div class="who">
+    <span class="lbl">Для кого</span>
+    <p style="margin:0 0 12px">Для всех участников производственных команд и для всех, кто хочет понять, как будет устроен процесс создания продукта в ближайшие годы. Технический бэкграунд не нужен: разбираемся на примере одной задачи, а не на уровне кода.</p>
+    <ul>
+      <li><strong>Вся производственная команда</strong> — продакт, аналитик, разработчик, тестировщик, дизайнер, DevOps: у каждой роли меняется зона ответственности, и полезнее увидеть это вместе, чем узнать поодиночке</li>
+      <li><strong>Технический директор</strong> — решить, вкладываться сейчас или подождать</li>
+      <li><strong>Владелец или генеральный</strong> — понять, за что просят бюджет и что получится на выходе</li>
+      <li><strong>Руководитель разработки</strong> — внедрять это и объяснять команде</li>
+      <li><strong>Инвестор, заказчик, руководитель смежной функции</strong> — понимать, что вам обещают, когда говорят про ИИ в разработке, и какие вопросы задавать</li>
+    </ul>
+  </div>
+  <div class="who" style="margin-top:26px">
+    <span class="lbl">Сколько займёт</span>
+    <p style="margin:0">Около <strong>52 минут</strong> целиком: по 4–8 минут на модуль плюс короткий тест после каждого. Прогресс держится в рамках одной сессии, поэтому лучше пройти за раз — но можно и по модулю в день.</p>
+  </div>
+  <p style="color:var(--ink-70);max-width:60ch">Пока тест не пройден, следующий модуль закрыт. Это не геймификация — курс как раз про то, что гейт, который можно проскочить, гейтом не является. Логично начать с себя.</p>
+  <div class="toc">
+    ${COURSE.map(m=>`<div class="toc-row"><span class="num mono">${m.n}</span><span class="t">${m.title}</span><span class="d">${m.short} · ${m.min} мин</span></div>`).join('')}
+  </div>
+  <div class="nav">
+    <button class="btn primary" onclick="openMod(0)">Начать модуль 01 →</button>
+    <span class="fill"></span>
+    <button class="btn" onclick="openFaq()">Частые вопросы</button>
+  </div>`+SIG;
+  window.scrollTo(0,0); drawSpine();
+}
+
+function renderModule(){
+  const m=COURSE[S.mod];
+  const head=`
+    <div class="mhead">
+      <div class="mnum mono">Модуль ${m.n} <span style="color:var(--ink-45);font-weight:400">· ${m.min} мин</span></div>
+      <h2 class="mtitle">${m.title}</h2>
+      <p class="mkick">${m.kick}</p>
+    </div>`;
+  if(S.onGate){ view.innerHTML=head+gateHTML()+SIG; wireGate(); if(!S.keepScroll) window.scrollTo(0,0); S.keepScroll=false; drawSpine(); return; }
+  const st=m.steps[S.step];
+  const bar=`<div class="steps-bar">${m.steps.map((_,i)=>`<span class="sbit ${i<=S.step?'on':''}"></span>`).join('')}</div>`;
+  const last = S.step===m.steps.length-1;
+  view.innerHTML=head+bar+`
+    <div class="step">
+      <div class="stepnum mono">Шаг ${S.step+1} из ${m.steps.length}</div>
+      <h3>${st.h}</h3>
+      ${st.html}
+    </div>
+    <div class="nav">
+      <button class="btn" ${S.step===0?'disabled':''} onclick="prevStep()">← назад</button>
+      <span class="fill"></span>
+      <button class="btn primary" onclick="nextStep()">${last?'К тесту →':'Дальше →'}</button>
+    </div>`+SIG;
+  if(!S.keepScroll) window.scrollTo(0,0);
+  S.keepScroll=false;
+  drawSpine();
+}
+
+function gateHTML(){
+  const m=COURSE[S.mod], A=S.answers[S.mod];
+  const need=Math.ceil(m.quiz.length*2/3);
+  const answered=A.every(x=>x!==null);
+  const right=A.filter((x,i)=>x===m.quiz[i].c).length;
+  return `
+  <div class="gate">
+    <div class="gate-tape" role="presentation"></div>
+    <div class="gate-body">
+      <h3>Проверка по модулю ${m.n}</h3>
+      <p class="req mono">нужно верных: ${need} из ${m.quiz.length}</p>
+      ${m.quiz.map((q,qi)=>`
+        <div class="q">
+          <div class="qt">${qi+1}. ${q.q}</div>
+          ${q.a.map((opt,oi)=>{
+            let cls='opt';
+            if(A[qi]!==null){
+              if(oi===q.c) cls+=' right';
+              else if(oi===A[qi]) cls+=' wrong';
+            }
+            return `<button class="${cls}" ${A[qi]!==null?'disabled':''} data-q="${qi}" data-o="${oi}"><span class="mk">${'ABCD'[oi]}</span>${opt}</button>`;
+          }).join('')}
+          ${A[qi]!==null?`<div class="why">${q.why}</div>`:''}
+        </div>`).join('')}
+      ${answered?`
+        <div class="verdict ${right>=need?'pass':'fail'}">
+          ${right>=need
+            ? `пройдено · ${right} из ${m.quiz.length} · ${S.mod<COURSE.length-1?'модуль '+COURSE[S.mod+1].n+' открыт':'курс завершён'}`
+            : `не пройдено · ${right} из ${m.quiz.length} · нужно ${need}`}
+        </div>`:''}
+      <div class="nav">
+        <button class="btn" onclick="backToSteps()">← к материалу</button>
+        <span class="fill"></span>
+        ${answered ? (right>=need
+            ? (S.mod<COURSE.length-1
+                ? `<button class="btn primary" onclick="openMod(${S.mod+1})">Модуль ${COURSE[S.mod+1].n} →</button>`
+                : `<button class="btn primary" onclick="finish()">Завершить курс →</button>`)
+            : `<button class="btn primary" onclick="retry()">Пройти заново</button>`)
+          : ''}
+      </div>
+    </div>
+  </div>`;
+}
+
+function wireGate(){
+  view.querySelectorAll('.opt:not(:disabled)').forEach(b=>{
+    b.onclick=()=>{
+      const qi=+b.dataset.q, oi=+b.dataset.o;
+      if(S.answers[S.mod][qi]!==null) return;
+      S.answers[S.mod][qi]=oi;
+      const m=COURSE[S.mod], A=S.answers[S.mod];
+      if(A.every(x=>x!==null)){
+        const right=A.filter((x,i)=>x===m.quiz[i].c).length;
+        if(right>=Math.ceil(m.quiz.length*2/3)) S.passed[S.mod]=true;
+      }
+      const y=window.scrollY;
+      S.keepScroll=true;
+      renderModule();
+      window.scrollTo(0,y);
+    };
+  });
+}
+
+function renderFaq(){
+  view.innerHTML=`
+  <p class="eyebrow">Справочник · можно открыть в любой момент</p>
+  <h2 class="mtitle" style="margin-bottom:14px">Частые вопросы</h2>
+  <p class="lede" style="font-size:17px;margin-bottom:30px">Двенадцать вопросов, которые задают на первом же обсуждении — от совета директоров, от безопасности и от самой команды.</p>
+  <div id="faqlist">
+    ${FAQ.map((f,i)=>`
+      <div class="faqitem ${S.faqOpen.has(i)?'open':''}">
+        <button class="faqq" data-i="${i}">${f.q}</button>
+        <div class="faqa"><p>${f.a}</p></div>
+      </div>`).join('')}
+  </div>
+  <div class="nav">
+    <button class="btn primary" onclick="leaveAux()">← вернуться к курсу</button>
+  </div>`+SIG;
+  view.querySelectorAll('.faqq').forEach(b=>{
+    b.onclick=()=>{
+      const i=+b.dataset.i;
+      S.faqOpen.has(i) ? S.faqOpen.delete(i) : S.faqOpen.add(i);
+      b.parentElement.classList.toggle('open');
+    };
+  });
+  window.scrollTo(0,0); drawSpine();
+}
+
+function renderDone(){
+  view.innerHTML=`
+  <p class="eyebrow">Курс пройден · 9 из 9</p>
+  <h1 class="thesis" style="font-size:clamp(25px,4.2vw,40px)">Теперь возьмите одну<span class="dim">настоящую задачу.</span></h1>
+  <p class="lede">Материал закончился, но результата у него пока нет. Он появится, когда одна команда проведёт через цикл реальную задачу из бэклога и вы получите на руки две вещи: список контролей, которые не сработали, и цену прохода. С этого начинается предметный разговор о масштабировании — до этого он всегда про веру.</p>
+  <div class="note field" style="margin-top:32px"><span class="lbl">Три шага на эту неделю</span>
+    Ответить на четыре вопроса из девятого модуля. Выбрать одну команду — добровольно. Выбрать одну задачу из бэклога, не учебную.</div>
+
+  <h3 style="margin:44px 0 14px;font-size:20px">И ещё одно, напоследок</h3>
+  <p style="color:var(--ink-70)">Всё, что здесь написано, — не инструкция, которой надо следовать буквально. Это рабочая основа, собранная из двух открытых методологий и практики управления разработкой в крупной компании. У вас другая компания: другой размер, другой рынок, другая история, другие люди и другие ограничения.</p>
+  <p style="color:var(--ink-70)">Поэтому меняйте под себя смело. Возможно, вам не нужны семь шагов — хватит трёх. Возможно, начинать надо не с разработки, а с аналитики, потому что узкое место у вас там. Возможно, ваша безопасность согласится на большее, чем я предполагал, — или на существенно меньшее. Возможно, три месяца окажутся нереальным сроком, и честнее заложить полгода.</p>
+  <p style="color:var(--ink-70)">Единственное, что я бы просил не выбрасывать: <strong>снимите цифры до начала и держите метрику скорости в паре с метрикой качества.</strong> Всё остальное подгоняйте под свою ситуацию — это нормальная работа руководителя, а не отступление от методологии.</p>
+  <p style="color:var(--ink-70)">И если у вас получится иначе, чем описано, — напишите, мне это интересно: <a href="https://t.me/ykononov" target="_blank" rel="noopener">@ykononov</a> в телеграме. Курс открытый, и разбор чужого опыта делает его точнее.</p>
+  <div class="who" style="margin-top:44px">
+    <span class="lbl">Об авторе</span>
+    <p style="margin:0 0 10px"><strong>Юрий Кононов</strong> — CTO, 15+ лет в IT, из них последние годы — управление 20 командами и 200+ инженерами в одном из крупнейших российских банков: 7 продуктов, 60+ микросервисов, SLA 99,999%.</p>
+    <p style="margin:0;color:var(--ink-70)">Курс вырос из практической задачи: понять, как ИИ-нативные методологии переживают контакт с существующими процессами.</p>
+  </div>
+
+  <div class="subs">
+    <div class="subs-tape"></div>
+    <div class="subs-in">
+      <h3>Пишу про разработку и управление</h3>
+      <p>Статьи и заметки об инженерном менеджменте, ИИ в разработке и о том, как это переживает контакт с большой компанией. Подписывайтесь, где вам удобнее.</p>
+      <div class="subs-grid">
+        <a href="https://www.linkedin.com/in/ykononov/" target="_blank" rel="noopener"><span class="k">LinkedIn</span><span class="v">in/ykononov</span></a>
+        <a href="https://t.me/ykononovmd" target="_blank" rel="noopener"><span class="k">Телеграм-канал</span><span class="v">@ykononovmd</span></a>
+        <a href="https://t.me/ykononov" target="_blank" rel="noopener"><span class="k">Телеграм, написать</span><span class="v">@ykononov</span></a>
+        <a href="https://www.threads.com/@kononov.md" target="_blank" rel="noopener"><span class="k">Threads</span><span class="v">@kononov.md</span></a>
+      </div>
+      <div class="share-cta">
+        <p><strong>Если курс оказался полезным — передайте его дальше.</strong> Коллеге, который спорит с вами про ИИ в разработке. Руководителю, который просит бюджет. Команде, которой это внедрять. Курс бесплатный и без регистрации, делиться им ничего не стоит.</p>
+        <button class="btn primary" onclick="shareCourse()">Поделиться курсом</button>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:40px 0 16px;font-size:20px">Источники</h3>
+  <ul class="srcs">
+    <li><a href="https://aws.amazon.com/blogs/devops/" target="_blank" rel="noopener">AWS DevOps Blog</a> — исходный пост о методологии AI-DLC, Raja SP, 31 июля 2025</li>
+    <li><a href="https://github.com/awslabs/aidlc-workflows" target="_blank" rel="noopener">github.com/awslabs/aidlc-workflows</a> — открытые правила процесса, актуальна версия 2.0</li>
+    <li><a href="https://aws.amazon.com/blogs/industries/ai-driven-development-lifecycle-for-financial-services/" target="_blank" rel="noopener">AI-DLC for Financial Services</a> — применение в финансовом секторе и требования к инфраструктуре</li>
+    <li>«AI-Disrupt PDLC. ИИ-нативная трансформация разработки ПО для зрелого корпоративного контура», Сбер, версия 2.0, июнь 2026 — рамка контроля, уровни прав и зрелости, система метрик</li>
+  </ul>
+  <p style="font-size:14px;color:var(--ink-45);margin-top:26px">Это авторский разбор двух открытых методологий, а не их пересказ. Первоисточники читайте по ссылкам.</p>
+  <div class="nav">
+    <button class="btn" onclick="restart()">К началу</button>
+    <span class="fill"></span>
+    <button class="btn primary" onclick="openFaq()">Частые вопросы</button>
+  </div>`+SIG;
+  window.scrollTo(0,0); drawSpine();
+}
+
+function openMod(i){ if(!unlocked(i))return; S.view='module'; S.mod=i; S.step=0; S.onGate=false; renderModule(); }
+function nextStep(){ const m=COURSE[S.mod]; if(S.step<m.steps.length-1){S.step++;} else {S.onGate=true;} renderModule(); }
+function prevStep(){ if(S.step>0){S.step--; renderModule();} }
+function backToSteps(){ S.onGate=false; S.step=COURSE[S.mod].steps.length-1; renderModule(); }
+function retry(){ S.answers[S.mod]=COURSE[S.mod].quiz.map(()=>null); renderModule(); }
+function finish(){ S.view='done'; renderDone(); }
+function restart(){ S.view='intro'; renderIntro(); }
+function openFaq(){ if(S.view!=='faq'&&S.view!=='glossary'){ S.auxFrom=S.view; } S.view='faq'; renderFaq(); }
+
+
+document.addEventListener('keydown',e=>{
+  if(S.view!=='module'||S.onGate) return;
+  if(e.key==='ArrowRight') nextStep();
+  if(e.key==='ArrowLeft') prevStep();
+});
+
+renderIntro();
+</script>
+</body>
+</html>
